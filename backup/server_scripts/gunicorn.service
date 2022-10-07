@@ -1,0 +1,26 @@
+[Unit]
+Description=Gunicorn
+ConditionPathExists=/home/bonehealthtracker/bonehealthtracker
+After=network.target
+
+[Service]
+Type=notify
+User=bonehealthtracker
+Group=bonehealthtracker
+
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/bonehealthtracker/bonehealthtracker
+ExecStart=/usr/bin/gunicorn --workers 3 --preload --worker-class=uvicorn.workers.UvicornWorker main:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+PermissionsStartOnly=true
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gunicorn
+
+
+[Install]
+WantedBy=multi-user.target

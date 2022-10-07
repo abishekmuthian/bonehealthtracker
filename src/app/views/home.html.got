@@ -1,0 +1,381 @@
+<section>
+    <header>
+        <h2>With just 3 steps</h2>
+        <p>Start building meaningful relationships with your followers.</p>
+    </header>
+    <aside>
+        <img alt="Twitter logo" src="/assets/images/app/2021-Twitter-logo-blue.png" height="150">
+        <h3>Connect your Twitter Account</h3>
+        <p>Once you connect with your Twitter account, Bone Health Tracker retrieves your followers and monitors their tweets for you.</p>
+    </aside>
+    <aside>
+        <img alt="A console on one side and brain on other to signify machine learning" src="/assets/images/app/coding.png" height="150">
+        <h3>Set your favourite topics</h3>
+        <p>Bone Health Tracker uses machine learning to classify the tweets from your followers.
+        </p>
+    </aside>
+    <aside>
+        <img alt="Heart image to signify liking the tweet" src="/assets/images/app/heart-red.png" height="150">
+        <h3>Choose your engagement</h3>
+        <p>Either let Bone Health Tracker like the tweets which matches your chosen topics automatically or receive email digest of the tweets.</p>
+    </aside>
+</section>
+<hr>
+
+<section id="reports">
+    <div>
+        <svelte-reports/>
+    </div>
+</section>
+
+<section id="upload">
+    <div>
+    <section>
+        <h3>Upload photo of the assessment section from the Dexa(BMD) scan report</h3>
+    </section>
+    <section>
+        <form method="post" enctype="multipart/form-data" action="/users/upload">
+            <label>Select the photo of the assessment section</label>
+            <input type="file" accept="image/*" name="dexaScanImage"/>
+            <div class="field actions">
+                <button type="submit" class="button" value="Submit">Submit</button>
+            </div>
+        </form>
+    </section>
+    </div> 
+</section>
+
+{{ if not .loggedIn }}
+    <section id="register">
+        <div>
+            <details {{ if .error }}{{ if eq .error "not_a_valid_email_register"}}open=""
+                     {{ else if eq .error "not_a_valid_name_register"}}open=""
+                     {{ else if eq .error "not_a_valid_password_register"}}open=""
+                     {{ else if eq .error "duplicate_email_register"}}open=""{{end}}{{end}}>
+                <summary>Don't have an account? You can register here.</summary>
+                {{ if .error }}
+                    <section class="notice">
+                        {{ if eq .error "not_a_valid_name_register"}}
+                            <p class="error">Please enter your Name.</p>
+                        {{ else if eq .error "not_a_valid_email_register"}}
+                            <p class="error">Please enter a valid email address.</p>
+                        {{ else if eq .error "not_a_valid_password_register"}}
+                            <p class="error">Passwords must be at least 8 characters long</p>
+                        {{ else if eq .error "duplicate_email_register"}}
+                            <p class="error">Email address is already registered, Use forgot password to reset the
+                                password.</p>
+                        {{ end }}
+                    </section>
+                {{ end }}
+                <section>
+                    <form method="post" class="resource-update-form" action="/users/create">
+                        {{ field "Name" "name" "" "autofocus" }}
+                        {{ field "Email" "email" "" "autofocus" }}
+                        {{ field "Password" "password" "" "password" "type=password" }}
+                        <div class="field actions">
+                            <button type="submit" class="button " value="Register">Register</button>
+                        </div>
+
+                        <input name="redirectURL" type="hidden" value="{{.redirectURL}}">
+                    </form>
+                </section>
+            </details>
+        </div>
+    </section>
+    <section id="login">
+        <header>
+            <h3>Login</h3>
+            <p>Login to set the topics and increase engagement.</p>
+        </header>
+        <div>
+            {{ if .error }}
+                <section class="notice">
+                    {{ if eq .error "not_a_valid_login"}}
+                        <p class="error">Invalid login credentials, Check email and password.</p>
+                    {{ end }}
+                </section>
+            {{ end }}
+            <section>
+                <form action="/users/login" method="post">
+                    {{ field "Email" "email" "" "email" "autofocus"}}
+                    {{ field "Password" "password" "" "password" "type=password"}}
+                    <div class="actions">
+                        <button type="submit" class="button" value="Login">Login</button>
+                    </div>
+
+                    <input name="redirectURL" type="hidden" value="{{.redirectURL}}">
+                </form>
+            </section>
+        </div>
+    </section>
+    <section id="forgot_password">
+        <div>
+            <details
+                    {{ if or .error .notice }}{{ if or (eq .error "not_a_valid_account") (eq .notice "password_reset_sent" )}}open=""{{end}}{{end}}>
+                <summary>Forgot password? You can reset it here.</summary>
+                {{ if .notice }}
+                    <section class="notice">
+                        {{ if eq .notice "password_reset_sent"}}
+                            <p>Your password reset link was sent to your email!</p>
+                        {{ end }}
+                    </section>
+                {{ end }}
+                {{ if .error }}
+                    <section class="notice">
+                        {{ if eq .error "not_a_valid_account"}}
+                            <p class="error">Invalid email id, please enter the email id used with this account.</p>
+                        {{ end }}
+                    </section>
+                {{ end }}
+                <section>
+                    <form action="/users/password/reset" method="post">
+                        {{ field "Email" "email" "" "autofocus" }}
+
+                        <div class="actions">
+                            <button type="submit" class="button" value="Reset">Reset</button>
+                        </div>
+                    </form>
+                </section>
+            </details>
+        </div>
+    </section>
+{{ end }}
+
+<section
+        id="reset_password" {{ if .error }}{{ if eq .error "not_a_valid_password_reset"}} show {{ else }} hidden {{end}} {{ else if not .show_reset_password }} hidden {{ end }}>
+    <header>
+        <h3>Reset Password</h3>
+    </header>
+    <div>
+        {{ if .error }}
+            <section class="notice">
+                {{ if eq .error "not_a_valid_password_reset"}}
+                    <p class="error">Passwords must be at least 8 characters long</p>
+                {{ end }}
+            </section>
+        {{ end }}
+        <form action="/users/password/change" method="post">
+            <h1>Change Password</h1>
+            {{ field "Password" "password" "" "password" "type=password" }}
+            <input name="id" type="hidden" value="{{ .currentUser.ID }}"/>
+            <div class="actions">
+                <button type="submit" class="button">Change Password</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+{{ if and .loggedIn (not .currentUser.TwitterConnected) }}
+    <section id="connect">
+        <header>
+            <h1>Connect your Twitter Account</h1>
+        </header>
+        <div class="twitter_login">
+            {{ if .error }}
+                <section class="notice">
+                    {{ if eq .error "failed_twitter_connect"}}
+                        <p class="error">Unable to connect to the Twitter account. Please contact support</p>
+                        <br/>
+                    {{ end }}
+                </section>
+            {{ end }}
+            <section>
+                <p>
+                    <a href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id={{ .clientID }}&redirect_uri={{ .redirectURI }}&scope={{ .twitterScopes }}&state={{.authenticity_token}}&code_challenge={{ .code }}&code_challenge_method=plain"><i>Login
+                            to Twitter &nearr;</i></a>
+                </p>
+            </section>
+        </div>
+    </section>
+{{ end }}
+
+
+{{ if and .loggedIn .currentUser.TwitterConnected }}
+    <section id="topics">
+        <header>
+            <h3>Topic Classification</h3>
+            <p>Get tweets from your followers classified by your favourite topics.</p>
+            <p><sup>PRO TIP</sup>Tweets are classified using Machine Learning, So the topics can be of broader
+                categories instead of just keywords.</p>
+        </header>
+        <div>
+            {{ if .error }}
+                <section class="error">
+                    {{ if eq .error "not_a_valid_topic"}}
+                        <p>Topics should be separated by a comma, can contain alphanumeric, space and are limited to 10
+                            topics.</p>
+                    {{ else if eq .error "not_subscribed"}}
+                        <p>Your trial has ended, You must be subscribed to receive the tweets from your followers,
+                            Please
+                            use the payment button
+                            below to subscribe.</p>
+                    {{ end }}
+                </section>
+            {{ end }}
+            <section>
+                <form action="/users/keyword?redirectURL=/#topics" method="post" id="keywords">
+                    <label>Topics: </label>
+                    <textarea cols="28" rows="5" name="keywords" wrap="hard"
+                              placeholder="Topic 1, Topic 2,...Topic 10"
+                              maxlength="1000">{{ if .currentUser.Keywords }} {{ $length := len .currentUser.Keywords }} {{ range $i, $keyword := .currentUser.Keywords }} {{- $keyword -}}{{if lt $i (subtract $length 1) }},{{ end }}{{ end }}{{ end }}</textarea>
+                    <label>Engagement: </label>
+                    <input type="checkbox" id="action-auto-like" name="autolike" value="True"
+                           {{ if .currentUser.AutoLike }}checked {{ end }}> <label
+                            for="action-auto-like">Auto Like</label>
+                    <input type="checkbox" id="action-email" name="email" value="True"
+                           {{ if .currentUser.Notification }}checked {{ end }}><label
+                            for="action-email">Email Digest</label>
+                    <input name="authenticity_token" type="hidden" value="{{.authenticity_token}}">
+                    <br>
+                    <button type="submit" class="submit_button">SUBMIT</button>
+                </form>
+            </section>
+            {{ if .notice }}
+                <section class="notice">
+                    {{ if eq .notice "topics_removed"}}
+                        <p>Topics have been removed, Tweets from your followers cannot be filtered.</p>
+                    {{ end }}
+                    {{ if eq .notice "topics_added"}}
+                        <p>Topics have been added, Now you will receive tweets from your followers which matches these
+                            topics.</p>
+                    {{ end }}
+                </section>
+            {{ end }}
+        </div>
+    </section>
+{{ end }}
+<hr>
+<section>
+        <blockquote>
+            <img alt="Quote" src="/assets/images/app/icon-quote.svg" height="80"><br>
+            "After using Bone Health Tracker, I have been able to receive tweets from the followers of my personal, business accounts and engage with them."
+            <footer><img alt="Bone Health Tracker icon" src="/assets/icons/android-icon-72x72.png" height="36"><br><br><i>- Abishek Muthian, Creator of Bone Health Tracker</i></footer>
+        </blockquote>
+    <figure>
+        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/dbarghya_das_supershot.png">
+        <figcaption><i>A health need-gap related tweet identified by Bone Health Tracker</i></figcaption>
+    </figure>
+    <br/>
+    <br/>
+    <figure>
+        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/ruhi_supershot.png">
+        <figcaption><i>A product-market-fit related tweet identified by Bone Health Tracker</i></figcaption>
+    </figure>
+    <br/>
+    <br/>
+    <figure>
+        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/joe_king_supershot.png">
+        <figcaption><i>A problem-solving related tweet identified by Bone Health Tracker</i></figcaption>
+    </figure>
+</section>
+<hr>
+{{/*        <section>
+            <header>
+                <h3>Subscription</h3>
+            </header>
+            <div class="subscription">
+                <form action="{{ if not .currentUser.Subscription }}/subscriptions/create-checkout-session{{ else }}/subscriptions/manage-billing{{ end }}"
+                      method="POST">
+                    <input type="hidden" name="priceId" value="{{ .priceId }}"/>
+                    <input name="authenticity_token" type="hidden" value="{{.authenticity_token}}">
+                    <button type="submit"
+                            class="submit_button">{{ if not .currentUser.Subscription }}{{ .price }}{{ else }} MANAGE BILLING {{ end }}</button>
+                </form>
+            </div>
+            {{ end }}
+            {{ if .notice }}
+                <section class="notice">
+                    {{ if eq .notice "payment_success"}}
+                        <p>Your payment was successful!</p>
+                    {{ end }}
+                </section>
+            {{ end }}
+            {{ if .notice }}
+                <section class="notice">
+                    {{ if eq .notice "payment_failure"}}
+                        <p class="error">Your payment was cancelled. If this was unintentional, You can re-initiate the
+                            subscription payment process by clicking on the price button.</p>
+                    {{ end }}
+                </section>
+            {{ end }}
+        </section>*/}}
+<br/>
+<br/>
+<section>
+    <header>
+        <h3>Support</h3>
+    </header>
+    <div class="support">
+        <p>Please reach out to me on <a href="https://twitter.com/bonehealthtracker" target="_blank">Twitter</a> for
+            feedback or <a href="/legal#support" target="_blank">email for support.</a></p>
+    </div>
+</section>
+
+<br/>
+<br/>
+
+<section id="pricing">
+    <header>
+        <h3>Pricing</h3>
+    </header>
+    <article>
+        <aside><p>Bone Health Tracker is free during the early access period, No credit card is required to sign-up.</p></aside>
+    </article>
+</section>
+
+
+<section id="faq">
+        <header>
+            <h3>Frequently Asked Questions</h3>
+        </header>
+        <div>
+            <ul>
+                <li>
+                    Why would I use Bone Health Tracker?
+                    <p>To develop meaningful relationship with your followers which results in greater engagements.</p>
+                </li>
+                <li>
+                    How much time do I need to spend to use Bone Health Tracker every day?
+                    <p>None! From sign-up to setting your favourite topics takes less than 5 minutes, Then you're all set; Bone Health Tracker does its magic automatically every day.</p>
+                </li>
+                <li>
+                    How do I know that Bone Health Tracker is working?
+                    <p>If you have 'Auto Like' enabled you'd find the tweets liked by Bone Health Tracker for you in the Likes section of Twitter and If you have 'Email Digest' enabled you will get a daily digest of tweets matching your chosen topics from your followers.</p>
+                </li>
+                <li>
+                    How do I choose my topics?
+                    <p>Since Bone Health Tracker uses machine learning to classify the tweets based on your topics, Choose broad ranging categories for your topics depending upon your needs. If you are using your personal Twitter account with Bone Health Tracker then choose topics which interests you. If you use your business Twitter account, Then choose categories which represent your business so that when your followers tweet about the topic you can engage with them to grow your business.</p>
+                </li>
+                <li>
+                    How do I connect additional Twitter account?
+                    <p>Please create another Bone Health Tracker account to add additional Twitter account.</p>
+                </li>
+                <li>
+                    Is this allowed by Twitter?
+                    <p>Absolutely, Bone Health Tracker uses the official Twitter API and ensures that all guidelines are followed.</p>
+                </li>
+                <li>
+                    Is any private data from my Twitter Account accessed?
+                    <p>No private data is accessed from your Twitter account, Only publicly available data such as your followers and their tweets are accessed and the tweets which match your chosen topics are stored for sending email and deleted after the email is sent.</p>
+                </li>
+                <li>
+                    Where can I follow the development of Bone Health Tracker?
+                    <p>I'm building Bone Health Tracker in public, on <a href="https://twitter.com/Abishek_Muthian/status/1542754615464427521" target="_blank">Twitter</a> </p>
+                </li>
+            </ul>
+        </div>
+</section>
+
+<br/>
+<br/>
+
+<section>
+    <div id="logout">
+        {{if .loggedIn}}
+            <p>
+                <a class="button grey" href="/users/logout" method="post">Logout</a>
+            </p>
+        {{end}}
+    </div>
+</section>

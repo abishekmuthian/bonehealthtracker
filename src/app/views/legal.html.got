@@ -1,0 +1,85 @@
+<article id="legal">
+    <section id="privacy">
+        <header><h1>Privacy Policy</h1></header>
+            <p>
+                Privacy and security of the users on the Bone Health Tracker is of utmost importance to me.
+            </p>
+            <p>
+                Website address is: https://bonehealthtracker.com.
+            </p>
+
+            <p>
+                Personal data:
+                <br/>
+                Name is stored when signing up with the service.
+                <br/>
+                Email id is stored to send the email digest of tweets if selected, for subscribers to send the tax invoice and for providing support.
+            </p>
+
+            <p>
+                Cookies:
+                <br/>
+                Tracking cookies are not used in Bone Health Tracker.
+            </p>
+
+            <p>
+                Analytics:
+                <br/>
+                Bone Health Tracker uses internal analytics on this platform to know whether people really want this service.
+                <br/>
+                The analytics data is stored in Google Analytics using anonymized IP address which are not linked to the user account. For more information on how Google uses this data, go to www.google.com/policies/privacy/partners/.
+                <br/>
+                Advertising related features of Google Analytics are disabled by default on this platform.
+            </p>
+
+    </section>
+
+
+    <section id="support">
+        <header><h1>Support</h1></header>
+        <p>
+            If you have any queries, please email to abishek@ this domain.
+        </p>
+    </section>
+
+
+    <section id="copyright">
+        <header><h1>Copyright</h1></header>
+        <p>Twitter, Twitter Logo are copyrights of Twitter Inc.</p>
+    </section>
+
+    <section id="opensource">
+               <header><h1>Open-Source Licenses</h1></header>
+               <p>Bone Health Tracker was made possible by these amazing open-source projects.</p>
+
+           <section>
+               <header><h2>MVP.css</h2></header>
+               <p>
+                   <a href="https://github.com/andybrewer/mvp">MVP.CSS</a> is distributed under MIT License.
+               </p>
+               <p>
+                   MIT License
+
+                   Copyright (c) 2020 Andy Brewer
+
+                   Permission is hereby granted, free of charge, to any person obtaining a copy
+                   of this software and associated documentation files (the "Software"), to deal
+                   in the Software without restriction, including without limitation the rights
+                   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                   copies of the Software, and to permit persons to whom the Software is
+                   furnished to do so, subject to the following conditions:
+
+                   The above copyright notice and this permission notice shall be included in all
+                   copies or substantial portions of the Software.
+
+                   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                   SOFTWARE.
+               </p>
+           </section>
+        </section>
+</article>
