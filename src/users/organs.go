@@ -1,6 +1,7 @@
 package users
 
 type Organ struct {
+	Id          int     `json: id`
 	Direction   string  `json:direction`
 	Site        string  `json: site`
 	Bmd         float64 `json:bmd`

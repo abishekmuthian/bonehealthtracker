@@ -489,8 +489,21 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 
 	fmt.Println("Organs with BMD: ", organs)
 
-	return organs
+	// Add Id and remove offsets for privacy
 
+	tempOrgans = []Organ{}
+
+	for i, organ := range organs {
+		organ.Id = i
+		organ.BeginOffset = 0
+		organ.EndOffset = 0
+
+		tempOrgans = append(tempOrgans, organ)
+	}
+
+	organs = tempOrgans
+
+	return organs
 }
 
 func findClosestElementIndex(arr []float64, k int, x float64) int {

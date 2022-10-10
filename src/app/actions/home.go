@@ -1,7 +1,10 @@
 package productctions
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/auth"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/mux"
@@ -10,6 +13,7 @@ import (
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/server/log"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/session"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/view"
+	"github.com/abishekmuthian/bonehealthtracker/src/users"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/stats"
 )
@@ -100,6 +104,74 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 		} else {
 			view.AddKey("priceId", config.Get("stripe_price_id_ideator_US"))
 			view.AddKey("price", config.Get("stripe_price_US"))
+		}
+	}
+
+	dexaCookie, err := r.Cookie("reports")
+
+	if err != nil {
+		log.Error(log.V{"Home, Error occurred while reading cookie": err})
+	} else {
+		log.Info(log.V{"Home, dexaCookie ": dexaCookie})
+	}
+
+	if dexaCookie != nil {
+
+		report := users.Report{}
+
+		decodedContent, err := base64.StdEncoding.DecodeString(dexaCookie.Value)
+
+		if err == nil {
+			err = json.Unmarshal([]byte(decodedContent), &report)
+
+			if err == nil {
+				view.AddKey("report", report)
+
+				skeletonMap := make(map[string]float64)
+
+				dexa := report.Dexas[len(report.Dexas)-1]
+
+				for _, organ := range dexa.Organs {
+
+					site := strings.ToLower(organ.Site)
+					direction := strings.ToLower(organ.Direction)
+
+					if strings.Contains(site, "spine") || strings.Contains(site, "l1-l4") || strings.Contains(site, "l1 through l4") {
+						skeletonMap["apSpine"] = organ.TScore
+					}
+
+					if site == "femur" {
+						if direction == "Left" {
+							skeletonMap["leftFemur"] = organ.TScore
+						} else {
+							skeletonMap["rightFemur"] = organ.TScore
+						}
+					}
+
+					if site == "femur neck" {
+						if direction == "Left" {
+							skeletonMap["leftFemurNeck"] = organ.TScore
+						} else {
+							skeletonMap["rightFemurNeck"] = organ.TScore
+						}
+					}
+
+					if site == "hip" {
+						if direction == "Left" {
+							skeletonMap["leftHip"] = organ.TScore
+						} else {
+							skeletonMap["rightHip"] = organ.TScore
+						}
+					}
+
+				}
+
+				view.AddKey("skeletonMap", skeletonMap)
+
+			} else {
+				log.Error(log.V{"Home, Error while marshalling cookie ": err})
+			}
+
 		}
 	}
 

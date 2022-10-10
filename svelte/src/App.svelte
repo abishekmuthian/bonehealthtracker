@@ -1,78 +1,157 @@
+<svelte:options tag="svelte-reports" />
+
 <script>
-  import { reports } from './store.js'
-  import Organ from './Organ.svelte'
-  import chartjs from 'chart.js/auto'
-  import { onMount } from 'svelte'
+  import { reports } from "./store.js";
+  import Organ from "./Organ.svelte";
+  import chartjs from "chart.js/auto";
+  import { onMount } from "svelte";
 
-  export let labels = []
+  export let labels = [];
+  export let datasets = [];
+  export let apSpineTScore = [];
+  export let leftFemurNeckTscore = [];
 
-  function removeReport(){
+  //   Chart JS
+  export let ctx;
+  export let chart;
+  export let chartCanvas;
+
+  function removeReport() {
     $reports.Dexas = $reports.Dexas.slice(0, -1);
-    console.log($reports) 
+    console.log("Remove Report: ",$reports);
+
+    removeLabel();
+    removeTScores();
+
+    deleteChart();
   }
 
-  function addLabels(label){
-    labels.push(label)
-    console.log(labels)
+  function removeLabel(){
+    labels.pop();
   }
 
-//   Chart JS
-let chartValues = [20, 10, 5, 2, 20, 30, 45];
-	let chartLabels = labels;
-	let ctx;
-	let chartCanvas;
+  function removeTScores(){
+     if (apSpineTScore.length > 0){
+         apSpineTScore.pop()
+     }
 
-	onMount(async (promise) => {
-		  ctx = chartCanvas.getContext('2d');
-			var chart = new chartjs(ctx, {
-				type: 'line',
-				data: {
-						labels: chartLabels,
-						datasets: [{
-								label: 'Revenue',
-								backgroundColor: 'rgb(255, 99, 132)',
-								borderColor: 'rgb(255, 99, 132)',
-								data: chartValues
-						}]
-				}
-		});
+     if (leftFemurNeckTscore.length > 0){
+         leftFemurNeckTscore.pop()
+     }
+  }
+
+  function addLabels(label) {
+    labels.push(label);
+    console.log("add Labels called:",labels);
+  }
+
+  function addDataset(organ) {
+    console.log("add Dataset called:",organ);
+    let site = organ.Direction + " " + organ.Site;
+
+    switch (site) {
+      case "AP Spine L1-L4":
+        apSpineTScore.push(organ.TScore);
+        break;
+      case "Left Femur Neck":
+        leftFemurNeckTscore.push(organ.TScore);
+        break;
+    }
+  }
+
+  function populateDataset() {
+    console.log("populate dataset called");
+    if (apSpineTScore != null) {
+      datasets.push({
+        label: "AP Spine L1-L4",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: apSpineTScore,
+      });
+    }
+
+    if (leftFemurNeckTscore != null) {
+      datasets.push({
+        label: "Left Femur Neck",
+        backgroundColor: "rgb(51, 51, 255)",
+        borderColor: "rgb(0, 0, 255)",
+        data: leftFemurNeckTscore,
+      });
+    }
+  }
+
+  function plotChart() {
+
+  }
+
+  function updateChart() {
+    console.log("update dataset called");
+    populateDataset();
+    chart.update();    
+  }
+
+  function deleteChart(){
+    console.log("delete dataset called");
+    // populateDataset();
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    chart.update();
+  }
+
+
+  onMount(async (promise) => {
+		 if ($reports.Dexas.length > 1){
+      populateDataset();
+    ctx = chartCanvas.getContext("2d");
+    chart = new chartjs(ctx, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+    });
+     }
 
 	});
+
+
 </script>
 
-<svelte:options tag="svelte-reports"/>
-
 {#if $reports.Dexas.length > 0}
-<section>
+  <section>
     <h2>Reports</h2>
-</section>
-<section>
+  </section>
+  <section>
     <form>
-        {#each $reports.Dexas as {Id, Year, Organs} (Id)}
-             <h3>{ Year }</h3>
-             {#each Organs as organ}
-             {@const label = organ.Direction +" " +organ.Site}
-             { addLabels(label) }
-             <h4>{ label }</h4>
-               <Organ bind:TScore={organ.TScore} bind:Bmd={organ.Bmd}/>
-             {/each}
+      {#each $reports.Dexas as { Id, Year, Organs } (Id)}
+        {@const label = Year}
+        {@const ignore = addLabels(label)}
+        <h3>{label}</h3>
+        {#each Organs as organ (organ.Id)}
+          {@const ignore = addDataset(organ)}
+          <h4>{organ.Direction + " " + organ.Site}</h4>
+          <Organ bind:TScore={organ.TScore} bind:Bmd={organ.Bmd} />
         {/each}
-    <br>
-        <button on:click={removeReport}>
-            Remove report
-        </button>
+        <hr>
+      {/each}
+      <br />
+      <button on:click={removeReport}>Remove report</button>
+      {#if $reports.Dexas.length > 1}
+        <button on:click={plotChart}>Plot Chart</button>
+      {/if}
     </form>
-</section>
-
-<p>{JSON.stringify($reports, 0, 2)}</p>
+  </section>
+  <p>{JSON.stringify($reports, 0, 2)}</p>
 {/if}
 
-<canvas bind:this={chartCanvas} id="myChart"></canvas>
+<canvas bind:this={chartCanvas} id="myChart" />
 
-<style>
-    /* MVP.css v1.12 - https://github.com/andybrewer/mvp */
+<style global>
+  /* MVP.css v1.12 - https://github.com/andybrewer/mvp */
 
-:root {
+  :root {
     --active-brightness: 0.85;
     --border-radius: 5px;
     --box-shadow: 2px 2px 10px;
@@ -86,7 +165,8 @@ let chartValues = [20, 10, 5, 2, 20, 30, 45];
     --color-table: #118bee;
     --color-text: #000;
     --color-text-secondary: #999;
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     --hover-brightness: 1.2;
     --justify-important: center;
     --justify-normal: left;
@@ -95,31 +175,31 @@ let chartValues = [20, 10, 5, 2, 20, 30, 45];
     --width-card-medium: 460px;
     --width-card-wide: 800px;
     --width-content: 1080px;
-}
+  }
 
-@media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: dark) {
     :root[color-mode="user"] {
-        --color-accent: #0097fc4f;
-        --color-bg: #333;
-        --color-bg-secondary: #555;
-        --color-link: #0097fc;
-        --color-secondary: #e20de9;
-        --color-secondary-accent: #e20de94f;
-        --color-shadow: #bbbbbb20;
-        --color-table: #0097fc;
-        --color-text: #f7f7f7;
-        --color-text-secondary: #aaa;
+      --color-accent: #0097fc4f;
+      --color-bg: #333;
+      --color-bg-secondary: #555;
+      --color-link: #0097fc;
+      --color-secondary: #e20de9;
+      --color-secondary-accent: #e20de94f;
+      --color-shadow: #bbbbbb20;
+      --color-table: #0097fc;
+      --color-text: #f7f7f7;
+      --color-text-secondary: #aaa;
     }
-}
+  }
 
-/* Layout */
-article aside {
+  /* Layout */
+  article aside {
     background: var(--color-secondary-accent);
     border-left: 4px solid var(--color-secondary);
     padding: 0.01rem 0.8rem;
-}
+  }
 
-body {
+  body {
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-family);
@@ -127,111 +207,111 @@ body {
     margin: 0;
     overflow-x: hidden;
     padding: 0;
-}
+  }
 
-footer,
-header,
-main {
+  footer,
+  header,
+  main {
     margin: 0 auto;
     max-width: var(--width-content);
     padding: 3rem 1rem;
-}
+  }
 
-hr {
+  hr {
     background-color: var(--color-bg-secondary);
     border: none;
     height: 1px;
     margin: 4rem 0;
     width: 100%;
-}
+  }
 
-section {
+  section {
     display: flex;
     flex-wrap: wrap;
     justify-content: var(--justify-important);
-}
+  }
 
-section img,
-article img {
+  section img,
+  article img {
     max-width: 100%;
-}
+  }
 
-section pre {
+  section pre {
     overflow: auto;
-}
+  }
 
-section aside {
+  section aside {
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow) var(--color-shadow);
     margin: 1rem;
     padding: 1.25rem;
     width: var(--width-card);
-}
+  }
 
-section aside:hover {
+  section aside:hover {
     box-shadow: var(--box-shadow) var(--color-bg-secondary);
-}
+  }
 
-[hidden] {
+  [hidden] {
     display: none;
-}
+  }
 
-/* Headers */
-article header,
-div header,
-main header {
+  /* Headers */
+  article header,
+  div header,
+  main header {
     padding-top: 0;
-}
+  }
 
-header {
+  header {
     text-align: var(--justify-important);
-}
+  }
 
-header a b,
-header a em,
-header a i,
-header a strong {
+  header a b,
+  header a em,
+  header a i,
+  header a strong {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
-}
+  }
 
-header nav img {
+  header nav img {
     margin: 1rem 0;
-}
+  }
 
-section header {
+  section header {
     padding-top: 0;
     width: 100%;
-}
+  }
 
-/* Nav */
-nav {
+  /* Nav */
+  nav {
     align-items: center;
     display: flex;
     font-weight: bold;
     justify-content: space-between;
     margin-bottom: 7rem;
-}
+  }
 
-nav ul {
+  nav ul {
     list-style: none;
     padding: 0;
-}
+  }
 
-nav ul li {
+  nav ul li {
     display: inline-block;
     margin: 0 0.5rem;
     position: relative;
     text-align: left;
-}
+  }
 
-/* Nav Dropdown */
-nav ul li:hover ul {
+  /* Nav Dropdown */
+  nav ul li:hover ul {
     display: block;
-}
+  }
 
-nav ul li ul {
+  nav ul li ul {
     background: var(--color-bg);
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
@@ -239,15 +319,15 @@ nav ul li ul {
     display: none;
     height: auto;
     left: -2px;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     position: absolute;
     top: 1.7rem;
     white-space: nowrap;
     width: auto;
     z-index: 1;
-}
+  }
 
-nav ul li ul::before {
+  nav ul li ul::before {
     /* fill gap above to make mousing over them easier */
     content: "";
     position: absolute;
@@ -255,76 +335,76 @@ nav ul li ul::before {
     right: 0;
     top: -0.5rem;
     height: 0.5rem;
-}
+  }
 
-nav ul li ul li,
-nav ul li ul li a {
+  nav ul li ul li,
+  nav ul li ul li a {
     display: block;
-}
+  }
 
-/* Typography */
-code,
-samp {
+  /* Typography */
+  code,
+  samp {
     background-color: var(--color-accent);
     border-radius: var(--border-radius);
     color: var(--color-text);
     display: inline-block;
     margin: 0 0.1rem;
     padding: 0 0.5rem;
-}
+  }
 
-details {
+  details {
     margin: 1.3rem 0;
-}
+  }
 
-details summary {
+  details summary {
     font-weight: bold;
     cursor: pointer;
-}
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     line-height: var(--line-height);
-}
+  }
 
-mark {
+  mark {
     padding: 0.1rem;
-}
+  }
 
-ol li,
-ul li {
+  ol li,
+  ul li {
     padding: 0.2rem 0;
-}
+  }
 
-p {
+  p {
     margin: 0.75rem 0;
     padding: 0;
     width: 100%;
-}
+  }
 
-pre {
+  pre {
     margin: 1rem 0;
     max-width: var(--width-card-wide);
     padding: 1rem 0;
-}
+  }
 
-pre code,
-pre samp {
+  pre code,
+  pre samp {
     display: block;
     max-width: var(--width-card-wide);
     padding: 0.5rem 2rem;
     white-space: pre-wrap;
-}
+  }
 
-small {
+  small {
     color: var(--color-text-secondary);
-}
+  }
 
-sup {
+  sup {
     background-color: var(--color-secondary);
     border-radius: var(--border-radius);
     color: var(--color-bg);
@@ -334,32 +414,32 @@ sup {
     padding: 0.2rem 0.3rem;
     position: relative;
     top: -2px;
-}
+  }
 
-/* Links */
-a {
+  /* Links */
+  a {
     color: var(--color-link);
     display: inline-block;
     font-weight: bold;
     text-decoration: none;
-}
+  }
 
-a:active {
+  a:active {
     filter: brightness(var(--active-brightness));
     text-decoration: underline;
-}
+  }
 
-a:hover {
+  a:hover {
     filter: brightness(var(--hover-brightness));
     text-decoration: underline;
-}
+  }
 
-a b,
-a em,
-a i,
-a strong,
-button,
-input[type="submit"] {
+  a b,
+  a em,
+  a i,
+  a strong,
+  button,
+  input[type="submit"] {
     border-radius: var(--border-radius);
     display: inline-block;
     font-size: medium;
@@ -367,75 +447,75 @@ input[type="submit"] {
     line-height: var(--line-height);
     margin: 0.5rem 0;
     padding: 1rem 2rem;
-}
+  }
 
-button,
-input[type="submit"] {
+  button,
+  input[type="submit"] {
     font-family: var(--font-family);
-}
+  }
 
-button:active,
-input[type="submit"]:active {
+  button:active,
+  input[type="submit"]:active {
     filter: brightness(var(--active-brightness));
-}
+  }
 
-button:hover,
-input[type="submit"]:hover {
+  button:hover,
+  input[type="submit"]:hover {
     cursor: pointer;
     filter: brightness(var(--hover-brightness));
-}
+  }
 
-a b,
-a strong,
-button,
-input[type="submit"] {
+  a b,
+  a strong,
+  button,
+  input[type="submit"] {
     background-color: var(--color-link);
     border: 2px solid var(--color-link);
     color: var(--color-bg);
-}
+  }
 
-a em,
-a i {
+  a em,
+  a i {
     border: 2px solid var(--color-link);
     border-radius: var(--border-radius);
     color: var(--color-link);
     display: inline-block;
     padding: 1rem 2rem;
-}
+  }
 
-article aside a {
+  article aside a {
     color: var(--color-secondary);
-}
+  }
 
-/* Images */
-figure {
+  /* Images */
+  figure {
     margin: 0;
     padding: 0;
-}
+  }
 
-figure img {
+  figure img {
     max-width: 100%;
-}
+  }
 
-figure figcaption {
+  figure figcaption {
     color: var(--color-text-secondary);
-}
+  }
 
-/* Forms */
-button:disabled,
-input:disabled {
+  /* Forms */
+  button:disabled,
+  input:disabled {
     background: var(--color-bg-secondary);
     border-color: var(--color-bg-secondary);
     color: var(--color-text-secondary);
     cursor: not-allowed;
-}
+  }
 
-button[disabled]:hover,
-input[type="submit"][disabled]:hover {
+  button[disabled]:hover,
+  input[type="submit"][disabled]:hover {
     filter: none;
-}
+  }
 
-form {
+  form {
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow) var(--color-shadow);
@@ -444,65 +524,65 @@ form {
     min-width: var(--width-card);
     padding: 1.5rem;
     text-align: var(--justify-normal);
-}
+  }
 
-form header {
+  form header {
     margin: 1.5rem 0;
     padding: 1.5rem 0;
-}
+  }
 
-input,
-label,
-select,
-textarea {
+  input,
+  label,
+  select,
+  textarea {
     display: block;
     font-size: inherit;
     max-width: var(--width-card-wide);
-}
+  }
 
-input[type="checkbox"],
-input[type="radio"] {
+  input[type="checkbox"],
+  input[type="radio"] {
     display: inline-block;
-}
+  }
 
-input[type="checkbox"]+label,
-input[type="radio"]+label {
+  input[type="checkbox"] + label,
+  input[type="radio"] + label {
     display: inline-block;
     font-weight: normal;
     position: relative;
     top: 1px;
-}
+  }
 
-input[type="range"] {
+  input[type="range"] {
     padding: 0.4rem 0;
-}
+  }
 
-input,
-select,
-textarea {
+  input,
+  select,
+  textarea {
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
     margin-bottom: 1rem;
     padding: 0.4rem 0.8rem;
-}
+  }
 
-input[type="text"],
-textarea {
+  input[type="text"],
+  textarea {
     width: calc(100% - 1.6rem);
-}
+  }
 
-input[readonly],
-textarea[readonly] {
+  input[readonly],
+  textarea[readonly] {
     background-color: var(--color-bg-secondary);
-}
+  }
 
-label {
+  label {
     font-weight: bold;
     margin-bottom: 0.2rem;
-}
+  }
 
-/* Popups */
-dialog {
+  /* Popups */
+  dialog {
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow) var(--color-shadow);
@@ -512,10 +592,10 @@ dialog {
     transform: translate(-50%, -50%);
     width: 50%;
     z-index: 999;
-}
+  }
 
-/* Tables */
-table {
+  /* Tables */
+  table {
     border: 1px solid var(--color-bg-secondary);
     border-radius: var(--border-radius);
     border-spacing: 0;
@@ -524,43 +604,43 @@ table {
     overflow-x: auto;
     padding: 0;
     white-space: nowrap;
-}
+  }
 
-table td,
-table th,
-table tr {
+  table td,
+  table th,
+  table tr {
     padding: 0.4rem 0.8rem;
     text-align: var(--justify-important);
-}
+  }
 
-table thead {
+  table thead {
     background-color: var(--color-table);
     border-collapse: collapse;
     border-radius: var(--border-radius);
     color: var(--color-bg);
     margin: 0;
     padding: 0;
-}
+  }
 
-table thead th:first-child {
+  table thead th:first-child {
     border-top-left-radius: var(--border-radius);
-}
+  }
 
-table thead th:last-child {
+  table thead th:last-child {
     border-top-right-radius: var(--border-radius);
-}
+  }
 
-table thead th:first-child,
-table tr td:first-child {
+  table thead th:first-child,
+  table tr td:first-child {
     text-align: var(--justify-normal);
-}
+  }
 
-table tr:nth-child(even) {
+  table tr:nth-child(even) {
     background-color: var(--color-accent);
-}
+  }
 
-/* Quotes */
-blockquote {
+  /* Quotes */
+  blockquote {
     display: block;
     font-size: x-large;
     line-height: var(--line-height);
@@ -568,14 +648,13 @@ blockquote {
     max-width: var(--width-card-medium);
     padding: 1.5rem 1rem;
     text-align: var(--justify-important);
-}
+  }
 
-blockquote footer {
+  blockquote footer {
     color: var(--color-text-secondary);
     display: block;
     font-size: small;
     line-height: var(--line-height);
     padding: 1.5rem 0;
-}
-
+  }
 </style>

@@ -1,3 +1,5 @@
+{{ $report := .report }}
+{{ $skeletonMap := .skeletonMap }}
 <section>
     <header>
         <h2>With just 3 steps</h2>
@@ -22,16 +24,10 @@
 </section>
 <hr>
 
-<section id="reports">
-    <div>
-        <svelte-reports/>
-    </div>
-</section>
-
 <section id="upload">
     <div>
     <section>
-        <h3>Upload photo of the assessment section from the Dexa(BMD) scan report</h3>
+        <h2>Upload photo of the assessment section from the Dexa(BMD) scan report</h2>
     </section>
     <section>
         <form method="post" enctype="multipart/form-data" action="/users/upload">
@@ -44,6 +40,60 @@
     </section>
     </div> 
 </section>
+
+{{ if $report }}
+<br>
+
+<section id="reports">
+        <div>
+            <section>
+                <h2>Reports</h2>
+            </section>
+            <section>
+                <form>
+                    {{range $dexa := $report.Dexas}}
+                         <h3 class="year"><mark>{{ $dexa.Year }}</mark></h3>
+                         {{ $organs := $dexa.Organs}}
+                         {{ range $organ := $organs }}
+                         <h4>{{ $organ.Direction }}  {{ $organ.Site }}</h4>
+                         <label for="tscore">TScore:</label>
+                         <input id="tscore" type="number" step="0.1" min="-10" max="3"  value="{{ $organ.TScore }}"/>
+                         <label for="bmd">BMD:</label>
+                         <input id="bmd" type="number"  step = "0.001" min="0.001" max="3" value="{{ $organ.Bmd }}"/>
+                         {{ end }}
+                         <hr>
+                    {{end}}
+                    </form>
+            </section>
+        </div>
+</section>
+
+<br>
+<section id="skeleton">
+    <div>
+        <section>
+            <h2>Skeleton</h2>
+        </section>
+        <section>
+            {{ template "app/views/skeleton.html.got" $skeletonMap}}
+        </section>
+    </div>
+</section>
+
+<br>
+
+<section id="chart">
+    <div>
+        <section>
+            <h2>Chart</h2>
+        </section>
+        <section>
+            <canvas id="tScoreChart" width="400" height="400"></canvas>
+        </section>
+    </div>
+</section>
+
+{{ end }}
 
 {{ if not .loggedIn }}
     <section id="register">
