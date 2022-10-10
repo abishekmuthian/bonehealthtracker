@@ -208,7 +208,10 @@ function ActivateChart() {
             break;
           case "l1-l4":
             apSpineTScore.push(organ.TScore);
-            break;       
+            break;
+          case "ap lumbar spine":
+            apSpineTScore.push(organ.TScore);
+            break;                   
           case "left femur neck":
             leftFemurNeckTScore.push(organ.TScore);
             break;
@@ -323,6 +326,7 @@ function ActivateChart() {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: true,
           plugins: {
             legend: {
               position: "top",

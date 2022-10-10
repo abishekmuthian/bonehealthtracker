@@ -25,11 +25,10 @@
 <hr>
 
 <section id="upload">
-    <div>
-    <section>
-        <h2>Upload photo of the assessment section from the Dexa(BMD) scan report</h2>
-    </section>
-    <section>
+    <header>
+        <h2>Upload Report</h2>
+        <p>Upload photo of the assessment section from the Dexa(BMD) scan report</p>
+    </header>
         <form method="post" enctype="multipart/form-data" action="/users/upload">
             <label>Select the photo of the assessment section</label>
             <input type="file" accept="image/*" name="dexaScanImage"/>
@@ -37,20 +36,17 @@
                 <button type="submit" class="button" value="Submit">Submit</button>
             </div>
         </form>
-    </section>
-    </div> 
 </section>
 
 {{ if $report }}
 <br>
 
 <section id="reports">
-        <div>
-            <section>
+            <header>
                 <h2>Reports</h2>
-            </section>
-            <section>
-                <form>
+                <p>Your added report is processed and displayed here, Use the Upload section to add next report (or) delete button to delete last report.</p>
+            </header>
+                <!-- <form>
                     {{range $dexa := $report.Dexas}}
                          <h3 class="year"><mark>{{ $dexa.Year }}</mark></h3>
                          {{ $organs := $dexa.Organs}}
@@ -63,34 +59,58 @@
                          {{ end }}
                          <hr>
                     {{end}}
-                    </form>
-            </section>
-        </div>
+                </form> -->
+
+                
+                    {{range $dexa := $report.Dexas}}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><mark>{{ $dexa.Year }}</mark></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>Organ</th>
+                                <th>T-score</th>
+                                <th>BMD</th>
+                            </tr>
+                        </thead>
+                        {{ $organs := $dexa.Organs}}
+                        {{ range $organ := $organs }}
+                        <tr>
+                            <td>{{ $organ.Direction }}  {{ $organ.Site }}</td>
+                            <td>{{ $organ.TScore }}</td>
+                            <td>{{ $organ.Bmd }}</td>
+                        </tr>
+                        {{ end }}
+                    </table>
+                    <hr>    
+                    {{end}}
+                    <a href=""><em>Delete Last Report&times;</em></a>
+                    &nbsp;
+                    <a href="#upload"><em>Add Next Report&uarr;</em></a>
 </section>
 
 <br>
 <section id="skeleton">
-    <div>
-        <section>
+        <header>
             <h2>Skeleton</h2>
-        </section>
-        <section>
+            <p>Visual representation of your latest Dexa Scan Report findings.</p>
+        </header>
             {{ template "app/views/skeleton.html.got" $skeletonMap}}
-        </section>
-    </div>
 </section>
 
 <br>
 
 <section id="chart">
-    <div>
-        <section>
+        <header>
             <h2>Chart</h2>
-        </section>
-        <section>
+            <p>The progress of your treatment can be ascertained via these charts.</p>
+        </header>
+        <div>
             <canvas id="tScoreChart" width="400" height="400"></canvas>
-        </section>
-    </div>
+        </div>
 </section>
 
 {{ end }}

@@ -141,15 +141,15 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 					}
 
 					if site == "femur" {
-						if direction == "Left" {
+						if direction == "left" {
 							skeletonMap["leftFemur"] = organ.TScore
 						} else {
 							skeletonMap["rightFemur"] = organ.TScore
 						}
 					}
 
-					if site == "femur neck" {
-						if direction == "Left" {
+					if site == "femur neck" || site == "femoral neck" {
+						if direction == "left" {
 							skeletonMap["leftFemurNeck"] = organ.TScore
 						} else {
 							skeletonMap["rightFemurNeck"] = organ.TScore
@@ -157,7 +157,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 					}
 
 					if site == "hip" {
-						if direction == "Left" {
+						if direction == "left" {
 							skeletonMap["leftHip"] = organ.TScore
 						} else {
 							skeletonMap["rightHip"] = organ.TScore
