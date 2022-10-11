@@ -2,11 +2,12 @@ package users
 
 import (
 	"encoding/json"
-	"fmt"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/abishekmuthian/bonehealthtracker/src/lib/server/log"
 )
 
 type Direction struct {
@@ -39,7 +40,7 @@ func Parse(dexaData []byte) []Organ {
 	err := json.Unmarshal(dexaData, &result)
 
 	if err != nil {
-		print(err)
+		log.Error(log.V{"Parser, Error unmarshaling dexaData": err})
 	}
 
 	var organs []Organ
@@ -53,14 +54,12 @@ func Parse(dexaData []byte) []Organ {
 	for k, v := range m {
 		switch vv := v.(type) {
 		case string:
-			fmt.Println(k, "is string", vv)
+			// log.Info(log.V{"Parser":k, "is string": vv})
 		case int:
-			fmt.Println(k, "is int", vv)
+			// log.Info(log.V{"Parser":k, "is int": vv})
 		case []interface{}:
-			fmt.Println(k, "is an array:")
+			// log.Info(log.V{"Parser":k, "is array": vv})
 			for _, u := range vv {
-				// fmt.Println(i, u.(map[string]interface{})["Category"])
-
 				if u.(map[string]interface{})["Type"] == "ANATOMY" {
 
 					if u.(map[string]interface{})["Attribute"] != nil {
@@ -68,7 +67,7 @@ func Parse(dexaData []byte) []Organ {
 
 						if attribute.(map[string]interface{})["Type"].(string) == "DIRECTION" {
 
-							fmt.Println("Direction: ", attribute.(map[string]interface{})["Text"])
+							// log.Info(log.V{"Parser, Direction":attribute.(map[string]interface{})["Text"]})
 
 							text := strings.ToLower(attribute.(map[string]interface{})["Text"].(string))
 
@@ -94,7 +93,7 @@ func Parse(dexaData []byte) []Organ {
 
 					if attribute.(map[string]interface{})["Type"] == "TEST_VALUE" {
 
-						fmt.Println("BMD: ", attribute.(map[string]interface{})["Text"])
+						// log.Info(log.V{"Paser, BMD":attribute.(map[string]interface{})["Text"]})
 
 						text := strings.ToLower(attribute.(map[string]interface{})["Text"].(string))
 
@@ -113,6 +112,8 @@ func Parse(dexaData []byte) []Organ {
 								}
 
 								bmds = append(bmds, b)
+							} else {
+								log.Error(log.V{"Parser, Error converting text to float": err})
 							}
 						}
 
@@ -122,7 +123,7 @@ func Parse(dexaData []byte) []Organ {
 
 				if u.(map[string]interface{})["Category"] == "ANATOMY" {
 					if u.(map[string]interface{})["Type"] == "SYSTEM_ORGAN_SITE" {
-						fmt.Println("Organ: ", u.(map[string]interface{})["Text"])
+						log.Info(log.V{"Paser, Organ": u.(map[string]interface{})["Text"]})
 
 						text := strings.ToLower(u.(map[string]interface{})["Text"].(string))
 
@@ -163,7 +164,7 @@ func Parse(dexaData []byte) []Organ {
 							attributes := u.(map[string]interface{})["Attributes"].([]interface{})
 
 							for _, a := range attributes {
-								fmt.Println("BMD: ", a.(map[string]interface{})["Text"])
+								// log.Info(log.V{"Parser, BMD": a.(map[string]interface{})["Text"]})
 
 								text := strings.ToLower(a.(map[string]interface{})["Text"].(string))
 
@@ -182,6 +183,8 @@ func Parse(dexaData []byte) []Organ {
 										}
 
 										bmds = append(bmds, b)
+									} else {
+										log.Error(log.V{"Parser, Error converting text to float": err})
 									}
 								}
 							}
@@ -198,7 +201,7 @@ func Parse(dexaData []byte) []Organ {
 							for _, a := range attributes {
 
 								if a.(map[string]interface{})["Type"] == "TEST_VALUE" {
-									fmt.Println("BMD: ", a.(map[string]interface{})["Text"])
+									// log.Info(log.V{"Parser, BMD":a.(map[string]interface{})["Text"]})
 
 									text := a.(map[string]interface{})["Text"].(string)
 
@@ -217,6 +220,8 @@ func Parse(dexaData []byte) []Organ {
 											}
 
 											bmds = append(bmds, b)
+										} else {
+											log.Error(log.V{"Parser, Error converting text to float": err})
 										}
 									}
 								}
@@ -231,7 +236,7 @@ func Parse(dexaData []byte) []Organ {
 							attributes := u.(map[string]interface{})["Attributes"].([]interface{})
 
 							for _, a := range attributes {
-								fmt.Println("T-score: ", a.(map[string]interface{})["Text"])
+								// log.Info(log.V{"Parser, T-score":a.(map[string]interface{})["Text"]})
 
 								text := strings.ToLower(a.(map[string]interface{})["Text"].(string))
 
@@ -249,6 +254,8 @@ func Parse(dexaData []byte) []Organ {
 											endOffset:   a.(map[string]interface{})["EndOffset"].(float64),
 										}
 										tScores = append(tScores, t)
+									} else {
+										log.Error(log.V{"Parser, Error converting text to float": err})
 									}
 
 								}
@@ -263,7 +270,7 @@ func Parse(dexaData []byte) []Organ {
 							attributes := u.(map[string]interface{})["Attributes"].([]interface{})
 
 							for _, a := range attributes {
-								fmt.Println("Z-score: ", a.(map[string]interface{})["Text"])
+								// log.Info(log.V{"Parser, Z-score":a.(map[string]interface{})["Text"]})
 
 								text := strings.ToLower(a.(map[string]interface{})["Text"].(string))
 
@@ -281,6 +288,8 @@ func Parse(dexaData []byte) []Organ {
 											endOffset:   a.(map[string]interface{})["EndOffset"].(float64),
 										}
 										zScores = append(zScores, z)
+									} else {
+										log.Error(log.V{"Parser, Error converting text to float": err})
 									}
 								}
 							}
@@ -290,17 +299,16 @@ func Parse(dexaData []byte) []Organ {
 
 			}
 		default:
-			fmt.Println(k, "is of a type I don't know how to handle")
-
+			log.Info(log.V{"Parser, Don't know how to handle type": k})
 		}
 
 	}
 
-	fmt.Println("Organs: ", organs)
-	fmt.Println("Directions: ", directions)
-	fmt.Println("BMDs: ", bmds)
-	fmt.Println("T-Scores: ", tScores)
-	fmt.Println("Z-Scores: ", zScores)
+	/* 	log.Info(log.V{"Parser, Organs": organs})
+	   	log.Info(log.V{"Parser, Directions": directions})
+	   	log.Info(log.V{"Parser, BMDs": bmds})
+	   	log.Info(log.V{"Parser, T-Scores": tScores})
+	   	log.Info(log.V{"Parser, Z-Scores": zScores}) */
 
 	return setOrganValues(organs, directions, tScores, bmds)
 }
@@ -332,35 +340,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 		}
 
 	}
-
-	/* 	for _, organ := range organs {
-
-	   		if organ.direction != "" || strings.Contains(strings.ToLower(organ.site), "forearm") {
-	   			tempOrgans = append(tempOrgans, organ)
-	   		}
-
-	   	}
-	   	organs = tempOrgans */
-
-	/* 	for _, direction := range directions {
-		findEndOffset := direction.beginOffset - 1
-
-		for i, organ := range organs {
-			if organ.endOffset == findEndOffset {
-				organs[i].direction = direction.text
-			}
-		}
-
-		findBeginOffset := direction.endOffset + 1
-
-		for j, organ := range organs {
-			if organ.beginOffset == findBeginOffset {
-				organs[j].direction = direction.text
-			}
-		}
-	}
-
-	*/
 
 	for i, organ := range organs {
 
@@ -412,8 +391,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 
 	organs = tempOrgans
 
-	fmt.Println("Organs with directions: ", organs)
-
 	if len(tScores) != len(organs) {
 		organBeginOffsets = []float64{}
 		organEndOffsets = []float64{}
@@ -442,21 +419,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 			organs[i].TScore = tScore.text
 		}
 	}
-
-	// Remove organs without TScore
-
-	/* 	tempOrgans = []Organ{}
-
-	   	for _, organ := range organs {
-
-	   		if organ.tScore != 0.0 {
-	   			tempOrgans = append(tempOrgans, organ)
-	   		}
-
-	   	}
-	   	organs = tempOrgans */
-
-	fmt.Println("Organs with tScores: ", organs)
 
 	if len(bmds) != len(organs) {
 		organBeginOffsets = []float64{}
@@ -487,8 +449,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 		}
 	}
 
-	fmt.Println("Organs with BMD: ", organs)
-
 	// Add Id and remove offsets for privacy
 
 	tempOrgans = []Organ{}
@@ -502,6 +462,8 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 	}
 
 	organs = tempOrgans
+
+	log.Info(log.V{"Parser, Organs after setting values": organs})
 
 	return organs
 }

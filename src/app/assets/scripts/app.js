@@ -1,8 +1,3 @@
-// Returns navigator to be used by the game script in the iframe
-var connectSerial = async function () {
-  return navigator;
-};
-
 DOM.Ready(function () {
   // Insert CSRF tokens into forms
   window.onload = HandleDarkMode();
@@ -13,11 +8,7 @@ DOM.Ready(function () {
   // Insert CSRF tokens into forms
   ActivateForms();
 
-  // Login
-  ActivateCopyApprovedEmail();
-  ActivateLoginInput();
-
-  // Chat
+  // Chart
   ActivateChart();
 });
 
@@ -77,39 +68,6 @@ function authenticityToken() {
     return "";
   }
   return meta.getAttribute("content");
-}
-
-function ActivateCopyApprovedEmail() {
-  DOM.On(".copy_button", "click", function (e) {
-    /* Get the text field */
-    var copyText = document.getElementById("approvedEmail");
-
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-    /* Copy the text inside the text field */
-    document.execCommand("copy");
-  });
-}
-
-function ActivateLoginInput() {
-  DOM.On(".code", "input", function (e) {
-    var target = e.target,
-      position = target.selectionEnd,
-      length = target.value.length;
-
-    target.value = target.value
-      .replace(/[^\dA-Z]/g, "")
-      .replace(/(.{4})/g, "$1 ")
-      .trim();
-    target.selectionEnd = position +=
-      target.value.charAt(position - 1) === " " &&
-      target.value.charAt(length - 1) === " " &&
-      length !== target.value.length
-        ? 1
-        : 0;
-  });
 }
 
 // Perform AJAX post on click on method=post|delete anchors
@@ -175,7 +133,7 @@ function ActivateChart() {
 
     const reports = JSON.parse(decodedCookieValue);
 
-    console.log("Value in reports after retrieving cookie: ", reports);
+    // console.log("Value in reports after retrieving cookie: ", reports);
 
     let labels = [];
     let datasets = [];
@@ -188,61 +146,59 @@ function ActivateChart() {
     let rightHipTScore = [];
     let leftHipTScore = [];
 
-    for (let i = 0; i < reports.Dexas.length; i++) {
-      var dexa = reports.Dexas[i];
-      labels.push(dexa.Year);
+    for (let i = 0; i < reports.dexas.length; i++) {
+      var dexa = reports.dexas[i];
+      labels.push(dexa.year);
 
-      var organs = dexa.Organs;
+      var organs = dexa.organs;
 
       for (let j = 0; j < organs.length; j++) {
         var organ = organs[j];
-        var site = organ.Direction + " " + organ.Site.replace("Total", "");
+        var site = organ.direction + " " + organ.site.replace("Total", "");
         site = site.trim().toLowerCase();
 
         switch (site) {
           case "ap spine l1-l4":
-            apSpineTScore.push(organ.TScore);
+            apSpineTScore.push(organ.tScore);
             break;
           case "l1 through l4":
-            apSpineTScore.push(organ.TScore);
+            apSpineTScore.push(organ.tScore);
             break;
           case "l1-l4":
-            apSpineTScore.push(organ.TScore);
+            apSpineTScore.push(organ.tScore);
             break;
           case "ap lumbar spine":
-            apSpineTScore.push(organ.TScore);
-            break;                   
+            apSpineTScore.push(organ.tScore);
+            break;
           case "left femur neck":
-            leftFemurNeckTScore.push(organ.TScore);
+            leftFemurNeckTScore.push(organ.tScore);
             break;
           case "left femoral neck":
-            leftFemurNeckTScore.push(organ.TScore);
-            break;  
+            leftFemurNeckTScore.push(organ.tScore);
+            break;
           case "right femur neck":
-            rightFemurNeckTScore.push(organ.TScore);
+            rightFemurNeckTScore.push(organ.tScore);
             break;
           case "right femoral neck":
-            rightFemurNeckTScore.push(organ.TScore);
-            break;  
+            rightFemurNeckTScore.push(organ.tScore);
+            break;
           case "left femur":
-            leftFemurTScore.push(organ.TScore);
+            leftFemurTScore.push(organ.tScore);
             break;
           case "right femur":
-            rightFemurTScore.push(organ.TScore);
+            rightFemurTScore.push(organ.tScore);
             break;
           case "forearm":
-            forearmTScore.push(organ.TScore);
+            forearmTScore.push(organ.tScore);
             break;
           case "left hip":
-            leftHipTScore.push(organ.TScore);
+            leftHipTScore.push(organ.tScore);
             break;
           case "right hip":
-            rightHipTScore.push(organ.TScore);  
+            rightHipTScore.push(organ.tScore);
         }
       }
     }
-
-    console.log("Right femur Tscore: ", rightFemurTScore);
 
     if (apSpineTScore.length > 0) {
       datasets.push({
@@ -299,24 +255,26 @@ function ActivateChart() {
     }
 
     if (rightHipTScore.length > 0) {
-        datasets.push({
-          label: "Right Hip",
-          borderColor: CHART_COLORS.pink,
-          backgroundColor: transparentize(CHART_COLORS.pink, 0.5),
-          data: rightHipTScore,
-        });
+      datasets.push({
+        label: "Right Hip",
+        borderColor: CHART_COLORS.pink,
+        backgroundColor: transparentize(CHART_COLORS.pink, 0.5),
+        data: rightHipTScore,
+      });
     }
 
     if (leftHipTScore.length > 0) {
-        datasets.push({
-          label: "Left Hip",
-          borderColor: CHART_COLORS.maroon,
-          backgroundColor: transparentize(CHART_COLORS.maroon, 0.5),
-          data: leftHipTScore,
-        });
+      datasets.push({
+        label: "Left Hip",
+        borderColor: CHART_COLORS.maroon,
+        backgroundColor: transparentize(CHART_COLORS.maroon, 0.5),
+        data: leftHipTScore,
+      });
     }
 
-    if (reports.Dexas.length > 0) {
+    // console.log("datasets: ", datasets);
+
+    if (reports.dexas.length > 0) {
       ctx = document.getElementById("tScoreChart").getContext("2d");
       chart = new Chart(ctx, {
         type: "line",

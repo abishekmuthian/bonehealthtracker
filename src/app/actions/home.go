@@ -55,6 +55,9 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 
 	view.AddKey("itemId", params.Get("itemId"))
 
+	// Set Cloudflare turnstile site key
+	view.AddKey("turnstile_site_key", config.Get("turnstile_site_key"))
+
 	if currentUser.Anon() {
 		view.AddKey("loggedIn", false)
 	} else {
@@ -162,6 +165,10 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 						} else {
 							skeletonMap["rightHip"] = organ.TScore
 						}
+					}
+
+					if site == "forearm" {
+						skeletonMap["forearm"] = organ.TScore
 					}
 
 				}

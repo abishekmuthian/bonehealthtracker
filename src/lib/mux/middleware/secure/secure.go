@@ -8,7 +8,7 @@ import (
 // These package level variables should be called if required to set policies before the middleware is added
 
 // ContentSecurityPolicy defaults to a strict policy disallowing iframes and scripts from any other origin save self (and Google Analytics for scripts)
-var ContentSecurityPolicy = "frame-ancestors 'self'; connect-src 'self'; frame-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'"
+var ContentSecurityPolicy = "frame-ancestors 'self'; connect-src 'self'; frame-src 'self' challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; script-src 'self' challenges.cloudflare.com; img-src 'self'"
 
 // Middleware adds some headers suitable for secure sites
 func Middleware(h http.HandlerFunc) http.HandlerFunc {

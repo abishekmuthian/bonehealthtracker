@@ -31,12 +31,23 @@
     </header>
         <form method="post" enctype="multipart/form-data" action="/users/upload">
             <label>Select the photo of the assessment section</label>
-            <input type="file" accept="image/*" name="dexaScanImage"/>
+            <input type="file" accept="image/*" required name="dexaScanImage"/>
+            <div class="cf-turnstile" data-sitekey="{{ .turnstile_site_key }}"></div> 
             <div class="field actions">
                 <button type="submit" class="button" value="Submit">Submit</button>
             </div>
+            {{ if .error }}
+            {{ if eq .error "security_challenge_not_completed"}}
+            <p class="error">Please verify that you are a human.</p>
+            {{ else if eq .error "security_challenge_failed"}}
+            <p class="error">Security challenge failed,<br>Try again later if you are not a bot!</p>
+            {{ else if eq .error "not_a_valid_report"}}
+            <p class="error">Not a valid Dexa scan report,<br>Please upload photo(.jpg/.png) of the<br>assessment section from the Dexa(BMD)<br>scan report.</p>
+            {{ end }}
+            {{ end }}
         </form>
 </section>
+
 
 {{ if $report }}
 <br>

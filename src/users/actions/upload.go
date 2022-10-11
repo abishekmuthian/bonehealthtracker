@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/mux"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/server"
@@ -21,15 +23,77 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 	// Check the authenticity token
 	err := session.CheckAuthenticity(w, r)
 	if err != nil {
-		return err
+		return server.NotAuthorizedError(err)
 	}
-
-	// Check if this IP is allowed to upload
 
 	// Get the params
 	params, err := mux.Params(r)
 	if err != nil {
 		return server.InternalError(err)
+	}
+
+	// Using turnstile to verify users
+
+	if len(params.Get("cf-turnstile-response")) > 0 {
+		if string(params.Get("cf-turnstile-response")) != "" {
+
+			type turnstileResponse struct {
+				Success      bool     `json:"success"`
+				Challenge_ts string   `json:"challenge_ts"`
+				Hostname     string   `json:"hostname"`
+				ErrorCodes   []string `json:"error-codes"`
+				Action       string   `json:"login"`
+				Cdata        string   `json:"cdata"`
+			}
+
+			var remoteIP string
+			var siteVerify turnstileResponse
+
+			if config.Production() {
+				// Get the IP from Cloudflare
+				remoteIP = r.Header.Get("CF-Connecting-IP")
+
+			} else {
+				// Extract the IP from the address
+				remoteIP = r.RemoteAddr
+				forward := r.Header.Get("X-Forwarded-For")
+				if len(forward) > 0 {
+					remoteIP = forward
+				}
+			}
+
+			postBody := url.Values{}
+			postBody.Set("secret", config.Get("turnstile_secret_key"))
+			postBody.Set("response", string(params.Get("cf-turnstile-response")))
+			postBody.Set("remoteip", remoteIP)
+
+			resp, err := http.Post("https://challenges.cloudflare.com/turnstile/v0/siteverify", "application/x-www-form-urlencoded", strings.NewReader(postBody.Encode()))
+			if err != nil {
+				log.Info(log.V{"Upload, An error occurred while sending the request to the siteverify": err})
+				return server.InternalError(err)
+			}
+			defer resp.Body.Close()
+
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Error(log.V{"Upload, An error occurred while reading the response from the siteverify": err})
+				return server.InternalError(err)
+			}
+
+			json.Unmarshal(body, &siteVerify)
+
+			if !siteVerify.Success {
+				// Security challenge failed
+				log.Error(log.V{"Upload, Security challenge failed": siteVerify.ErrorCodes[0]})
+				return server.Redirect(w, r, "/?error=security_challenge_failed")
+			}
+		} else {
+			log.Error(log.V{"Upload, Security challenge unable to process": "response not received from user"})
+			return server.Redirect(w, r, "/?error=security_challenge_not_completed")
+		}
+	} else {
+		// Security challenge not completed
+		return server.Redirect(w, r, "/?error=security_challenge_not_completed")
 	}
 
 	for _, fh := range params.Files {
@@ -71,23 +135,26 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 			postBody, err := json.Marshal(req)
 			if err != nil {
 				log.Error(log.V{"Upload, Error creating POST body for classifier": err})
+				return server.InternalError(err)
 			}
 
-			responseBody := bytes.NewBuffer(postBody)
-			resp, err := http.Post(config.Get("classifier_server"), "application/json", responseBody)
+			requestBody := bytes.NewBuffer(postBody)
+			resp, err := http.Post(config.Get("classifier_server"), "application/json", requestBody)
 			if err != nil {
 				log.Info(log.V{"Upload, An error occurred while sending the request to the middleware": err})
+				return server.InternalError(err)
 			}
 			defer resp.Body.Close()
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
 				log.Error(log.V{"Upload, An error occurred while reading the response from the middleware": err})
+				return server.InternalError(err)
 			}
 
 			organs := users.Parse(body)
 
-			if organs != nil {
+			if len(organs) > 0 {
 				log.Info(log.V{"Organs after parsing ": organs})
 
 				dexaCookie, err := r.Cookie("reports")
@@ -127,6 +194,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 						http.SetCookie(w, dexaCookie)
 					} else {
 						log.Error(log.V{"Upload, Error occurred while setting cookie": err})
+						return server.InternalError(err)
 					}
 
 				} else {
@@ -169,25 +237,31 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 								http.SetCookie(w, dexaCookie)
 							} else {
 								log.Error(log.V{"Upload, Error occurred while setting cookie": err})
+								return server.InternalError(err)
 							}
 						}
 					} else {
 						log.Error(log.V{"Upload, Error occurred while decoding cookie": err})
+						return server.InternalError(err)
 					}
 
 				}
+			} else {
+				// No organs found
+				return server.Redirect(w, r, "/?error=not_a_valid_report")
 			}
 
 			// Redirect - ideally here we'd redirect to their original request path
 			redirectURL := params.Get("redirectURL")
 			if redirectURL == "" {
-				redirectURL = "/"
+				redirectURL = "/#reports"
 			}
 
 			return server.Redirect(w, r, redirectURL)
 
 		} else {
-
+			// Not a valid image
+			return server.Redirect(w, r, "/?error=not_a_valid_report")
 		}
 
 	}
