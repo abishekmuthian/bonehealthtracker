@@ -98,7 +98,7 @@
                     </table>
                     <hr>    
                     {{end}}
-                    <a href=""><em>Delete Last Report&times;</em></a>
+                    <a href="/users/delete" method="post"><em>Delete Last Report&times;</em></a>
                     &nbsp;
                     <a href="#upload"><em>Add Next Report&uarr;</em></a>
 </section>
@@ -115,6 +115,7 @@
 <section>
     <header>
         <h2>Legend</h2>
+        <p>World Health Organization (WHO) criteria:</p>
     </header>
     <table>
         <thead>

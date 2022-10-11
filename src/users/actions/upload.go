@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/mux"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/server"
@@ -183,12 +184,20 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 					cookieContent, err := json.Marshal(report)
 
+					t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+
+					if err != nil {
+						log.Error(log.V{"Upload, Setting cookie expires": err})
+						return server.InternalError(err)
+					}
+
 					if err == nil {
 						dexaCookie := &http.Cookie{
-							Name:   "reports",
-							Value:  base64.StdEncoding.EncodeToString(cookieContent),
-							MaxAge: 86400 * 60,
-							Path:   "/",
+							Name:    "reports",
+							Value:   base64.StdEncoding.EncodeToString(cookieContent),
+							Secure:  true,
+							Expires: t, // Expires in 2038
+							Path:    "/",
 						}
 
 						http.SetCookie(w, dexaCookie)
@@ -226,12 +235,20 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 							cookieContent, err := json.Marshal(tempReport)
 
+							t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+
+							if err != nil {
+								log.Error(log.V{"Upload, Setting cookie expires": err})
+								return server.InternalError(err)
+							}
+
 							if err == nil {
 								dexaCookie := &http.Cookie{
-									Name:   "reports",
-									Value:  base64.StdEncoding.EncodeToString(cookieContent),
-									MaxAge: 86400 * 60,
-									Path:   "/",
+									Name:    "reports",
+									Value:   base64.StdEncoding.EncodeToString(cookieContent),
+									Secure:  true,
+									Expires: t, // Expires in 2038
+									Path:    "/",
 								}
 
 								http.SetCookie(w, dexaCookie)
