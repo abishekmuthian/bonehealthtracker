@@ -1,6 +1,4 @@
-CREATE TABLE IF NOT EXISTS dexa (
+CREATE TABLE IF NOT EXISTS reports (
 id integer primary key autoincrement,
-created_at text,
-updated_at text,
-dexa text
+report text
 );
