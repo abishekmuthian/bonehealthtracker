@@ -2,17 +2,14 @@ package session
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/auth"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/mux"
-	"github.com/abishekmuthian/bonehealthtracker/src/lib/server/log"
-	"github.com/abishekmuthian/bonehealthtracker/src/users"
 )
 
 // CurrentUser returns the saved user (or an empty anon user)
 // for the current session cookie
-func CurrentUser(w http.ResponseWriter, r *http.Request) *users.User {
+/* func CurrentUser(w http.ResponseWriter, r *http.Request) *users.User {
 
 	// Start with an anon user by default (role 0, id 0)
 	user := &users.User{}
@@ -51,7 +48,7 @@ func CurrentUser(w http.ResponseWriter, r *http.Request) *users.User {
 	}
 
 	return user
-}
+} */
 
 // clearSession clears the request session cookie entirely.
 // If an error is encountered in processing params, the session is cleared.

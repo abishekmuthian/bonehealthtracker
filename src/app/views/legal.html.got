@@ -10,28 +10,36 @@
 
             <p>
                 Personal data:
-                <br/>
-                Name is stored when signing up with the service.
-                <br/>
-                Email id is stored to send the email digest of tweets if selected, for subscribers to send the tax invoice and for providing support.
+                <br>
+                No personal data is collected or shared with anyone.
+                <br>
+            </p>
+
+            <p>
+                3rd Party Services:
+                <br>
+                Bone Health Tracker uses the following services for analyzing the assessment section of the BMD report which doesn't contain any personal data.
+                <ul>
+                    <li>
+                        <a href="https://aws.amazon.com/textract/faqs/" target="_blank">AWS Textract</a>
+                    </li>
+                    <li>
+                        <a href="https://aws.amazon.com/comprehend/medical/faqs/" target="_blank">AWS Comprehend Medical</a>
+                    </li>
+                </ul>
             </p>
 
             <p>
                 Cookies:
-                <br/>
-                Tracking cookies are not used in Bone Health Tracker.
+                <br>
+                Bone Health Tracker uses <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare</a> for security, It might use necessary cookies to function.
             </p>
 
             <p>
-                Analytics:
-                <br/>
-                Bone Health Tracker uses internal analytics on this platform to know whether people really want this service.
-                <br/>
-                The analytics data is stored in Google Analytics using anonymized IP address which are not linked to the user account. For more information on how Google uses this data, go to www.google.com/policies/privacy/partners/.
-                <br/>
-                Advertising related features of Google Analytics are disabled by default on this platform.
+                Report Data:
+                <br>
+                The report data without containing any personal information is stored locally in your browser. If you submit it for research, Its stored in our server.
             </p>
-
     </section>
 
 
@@ -45,7 +53,10 @@
 
     <section id="copyright">
         <header><h1>Copyright</h1></header>
-        <p>Twitter, Twitter Logo are copyrights of Twitter Inc.</p>
+        <p>Human skeleton by <a href="https://en.wikipedia.org/wiki/File:Human_skeleton_front_en.svg#file" target="_blank">LadyofHats from Wikipedia.</a></p>
+        <p>Privacy Icon made by <a href="https://www.flaticon.com/authors/circlon-tech" title="Circlon Tech"> Circlon Tech </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.</p>
+        <p>Machine Learning Icon made by <a href="https://www.flaticon.com/free-icons/machine-learning" title="machine learning icons">Machine learning icons created by Circlon Tech - Flaticon</a>.</p> 
+        <p>Joint Icon by <a href="https://www.flaticon.com/free-icons/bone" title="bone icons">Bone icons created by Freepik - Flaticon</a>.</p> 
     </section>
 
     <section id="opensource">

@@ -23,6 +23,7 @@ func SetupRoutes() *mux.Mux {
 	// Add user actions
 	router.Post("/users/upload", useractions.HandleUpload)
 	router.Post("/users/delete", useractions.HandleDelete)
+	router.Post("/users/update", useractions.HandleUpdate)
 
 	// Add the legal page route
 	router.Get("/legal", HandleLegal)

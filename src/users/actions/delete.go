@@ -100,7 +100,8 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) error {
 			return server.InternalError(err)
 		}
 
-		// Redirect - ideally here we'd redirect to their original request path
+		// Redirect is handled by the JavaScript for anchor link POST,
+		// But redirectURL is needed here for page refresh
 		redirectURL := params.Get("redirectURL")
 		if redirectURL == "" {
 			redirectURL = "/#upload"

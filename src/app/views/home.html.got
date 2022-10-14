@@ -2,24 +2,23 @@
 {{ $skeletonMap := .skeletonMap }}
 <section>
     <header>
-        <h2>With just 3 steps</h2>
-        <p>Start building meaningful relationships with your followers.</p>
+        <h2>With just 1 step</h2>
+        <p>Only the assessment section of Bone Mineral Density(Dexa Scan) report is needed.</p>
     </header>
     <aside>
-        <img alt="Twitter logo" src="/assets/images/app/2021-Twitter-logo-blue.png" height="150">
-        <h3>Connect your Twitter Account</h3>
-        <p>Once you connect with your Twitter account, Bone Health Tracker retrieves your followers and monitors their tweets for you.</p>
+        <img alt="Twitter logo" src="/assets/images/app/joint.png" height="150">
+        <h3>Multiple Bones</h3>
+        <p>Tack the health of your Spine, Hip, Femur etc.</p>
     </aside>
     <aside>
-        <img alt="A console on one side and brain on other to signify machine learning" src="/assets/images/app/coding.png" height="150">
-        <h3>Set your favourite topics</h3>
-        <p>Bone Health Tracker uses machine learning to classify the tweets from your followers.
-        </p>
+        <img alt="A brain and gear icon to signify machine learning" src="/assets/images/app/machine-learning.png" height="150">
+        <h3>Machine Learning</h3>
+        <p>Uses Machine Learning to identify key metrics from the BMD report automatically.</p>
     </aside>
     <aside>
-        <img alt="Heart image to signify liking the tweet" src="/assets/images/app/heart-red.png" height="150">
-        <h3>Choose your engagement</h3>
-        <p>Either let Bone Health Tracker like the tweets which matches your chosen topics automatically or receive email digest of the tweets.</p>
+        <img alt="Lock and software UI depicting privacy" src="/assets/images/app/security.png" height="150">
+        <h3>Private</h3>
+        <p>No personal data is shared with anyone.</p>
     </aside>
 </section>
 <hr>
@@ -28,17 +27,16 @@
     <header>
         <h2>Upload Report</h2>
         <p>Upload photo of the assessment section from the Dexa(BMD) scan report</p>
+        <p><sup>PRO TIP</sup>Click <a href="#faq">here</a> to know how a BMD assessment section looks like.</p>
     </header>
         <form method="post" enctype="multipart/form-data" action="/users/upload">
             <label>Select the photo of the assessment section</label>
             <input type="file" accept="image/*" required name="dexaScanImage"/>
             <div class="cf-turnstile" data-sitekey="{{ .turnstile_site_key }}"></div> 
-            <div class="field actions">
-                <button type="submit" class="button" value="Submit">Submit</button>
-            </div>
+            <button type="submit" id="show">Submit</button>
             {{ if .error }}
             {{ if eq .error "security_challenge_not_completed"}}
-            <p class="error">Please verify that you are a human.</p>
+            <p class="error">Please verify that you are a human.<br>If you don't see the verification widget,<br>Please refresh page.<br>Report data will not be lost.</p>
             {{ else if eq .error "security_challenge_failed"}}
             <p class="error">Security challenge failed,<br>Try again later if you are not a bot!</p>
             {{ else if eq .error "not_a_valid_report"}}
@@ -48,7 +46,6 @@
         </form>
 </section>
 
-
 {{ if $report }}
 <br>
 
@@ -57,7 +54,7 @@
                 <h2>Reports</h2>
                 <p>Your added report is processed and displayed here, Use the Upload section to add next report (or) delete button to delete last report.</p>
             </header>
-                <!-- <form>
+                 <!-- <form>
                     {{range $dexa := $report.Dexas}}
                          <h3 class="year"><mark>{{ $dexa.Year }}</mark></h3>
                          {{ $organs := $dexa.Organs}}
@@ -98,7 +95,7 @@
                     </table>
                     <hr>    
                     {{end}}
-                    <a href="/users/delete" method="post"><em>Delete Last Report&times;</em></a>
+                    <a href="/users/delete" data-redirect="/#upload" method="post"><em>Delete Last Report&times;</em></a>
                     &nbsp;
                     <a href="#upload"><em>Add Next Report&uarr;</em></a>
 </section>
@@ -115,7 +112,7 @@
 <section>
     <header>
         <h2>Legend</h2>
-        <p>World Health Organization (WHO) criteria:</p>
+        <p>World Health Organization (WHO) criteria: </p>
     </header>
     <table>
         <thead>
@@ -129,6 +126,7 @@
             <td>Normal</td>
             <td>at or above -1 SD</td>
             <td>
+            <div class="svg-box" style="width:42px;height:42px">
                 <!-- Generator: Adobe Illustrator 12.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
 <svg
 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -249,12 +247,14 @@ inkscape:version="0.48.0 r9654"
 ></metadata
 ></svg
 >
+</div>
             </td>
         </tr>
         <tr>
             <td>Low Bone Mass</td>
             <td>between -1 and -2.5 SD</td>
             <td>
+            <div class="svg-box" style="width:42px;height:42px">
                 <!-- Generator: Adobe Illustrator 12.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
 <svg
 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -375,12 +375,14 @@ inkscape:version="0.48.0 r9654"
 ></metadata
 ></svg
 >
+</div>
             </td>            
         </tr>
         <tr>
             <td>Osteoporosis</td>
             <td>at or below -2.5 SD</td>
             <td>
+            <div class="svg-box" style="width:42px;height:42px">
                 <!-- Generator: Adobe Illustrator 12.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
 <svg
 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -501,6 +503,7 @@ inkscape:version="0.48.0 r9654"
 ></metadata
 ></svg
 >
+</div>
             </td>             
         </tr>
     </table>  
@@ -518,263 +521,70 @@ inkscape:version="0.48.0 r9654"
         </div>
 </section>
 
-{{ end }}
-
-{{ if not .loggedIn }}
-    <section id="register">
-        <div>
-            <details {{ if .error }}{{ if eq .error "not_a_valid_email_register"}}open=""
-                     {{ else if eq .error "not_a_valid_name_register"}}open=""
-                     {{ else if eq .error "not_a_valid_password_register"}}open=""
-                     {{ else if eq .error "duplicate_email_register"}}open=""{{end}}{{end}}>
-                <summary>Don't have an account? You can register here.</summary>
-                {{ if .error }}
-                    <section class="notice">
-                        {{ if eq .error "not_a_valid_name_register"}}
-                            <p class="error">Please enter your Name.</p>
-                        {{ else if eq .error "not_a_valid_email_register"}}
-                            <p class="error">Please enter a valid email address.</p>
-                        {{ else if eq .error "not_a_valid_password_register"}}
-                            <p class="error">Passwords must be at least 8 characters long</p>
-                        {{ else if eq .error "duplicate_email_register"}}
-                            <p class="error">Email address is already registered, Use forgot password to reset the
-                                password.</p>
-                        {{ end }}
-                    </section>
-                {{ end }}
-                <section>
-                    <form method="post" class="resource-update-form" action="/users/create">
-                        {{ field "Name" "name" "" "autofocus" }}
-                        {{ field "Email" "email" "" "autofocus" }}
-                        {{ field "Password" "password" "" "password" "type=password" }}
-                        <div class="field actions">
-                            <button type="submit" class="button " value="Register">Register</button>
-                        </div>
-
-                        <input name="redirectURL" type="hidden" value="{{.redirectURL}}">
-                    </form>
-                </section>
-            </details>
-        </div>
-    </section>
-    <section id="login">
-        <header>
-            <h3>Login</h3>
-            <p>Login to set the topics and increase engagement.</p>
-        </header>
-        <div>
-            {{ if .error }}
-                <section class="notice">
-                    {{ if eq .error "not_a_valid_login"}}
-                        <p class="error">Invalid login credentials, Check email and password.</p>
-                    {{ end }}
-                </section>
-            {{ end }}
-            <section>
-                <form action="/users/login" method="post">
-                    {{ field "Email" "email" "" "email" "autofocus"}}
-                    {{ field "Password" "password" "" "password" "type=password"}}
-                    <div class="actions">
-                        <button type="submit" class="button" value="Login">Login</button>
-                    </div>
-
-                    <input name="redirectURL" type="hidden" value="{{.redirectURL}}">
-                </form>
-            </section>
-        </div>
-    </section>
-    <section id="forgot_password">
-        <div>
-            <details
-                    {{ if or .error .notice }}{{ if or (eq .error "not_a_valid_account") (eq .notice "password_reset_sent" )}}open=""{{end}}{{end}}>
-                <summary>Forgot password? You can reset it here.</summary>
-                {{ if .notice }}
-                    <section class="notice">
-                        {{ if eq .notice "password_reset_sent"}}
-                            <p>Your password reset link was sent to your email!</p>
-                        {{ end }}
-                    </section>
-                {{ end }}
-                {{ if .error }}
-                    <section class="notice">
-                        {{ if eq .error "not_a_valid_account"}}
-                            <p class="error">Invalid email id, please enter the email id used with this account.</p>
-                        {{ end }}
-                    </section>
-                {{ end }}
-                <section>
-                    <form action="/users/password/reset" method="post">
-                        {{ field "Email" "email" "" "autofocus" }}
-
-                        <div class="actions">
-                            <button type="submit" class="button" value="Reset">Reset</button>
-                        </div>
-                    </form>
-                </section>
-            </details>
-        </div>
-    </section>
-{{ end }}
-
-<section
-        id="reset_password" {{ if .error }}{{ if eq .error "not_a_valid_password_reset"}} show {{ else }} hidden {{end}} {{ else if not .show_reset_password }} hidden {{ end }}>
+<br>
+<section id="research">
     <header>
-        <h3>Reset Password</h3>
+        <h2>Submit your reports for research</h2>
+        <p>You can submit your report <mark>without any personal data</mark> for bone treatment research.</p>
+        <p>Please add additional details for providing more insights about the report.</p>
+        <p><a href="/">Refresh</a> the page to update security verification before entering the details.</p>
     </header>
-    <div>
+
+    <form action="/users/update" method="post" id="research-form">
+        <label for="first-report-age">Age in the first  report:</label>
+        <input type="number" id="first-report-age" name="first-report-age" min="1" max="150" required/>
+        <label for="latest-report-age">Age in the latest report:</label>
+        <input type="number" id="latest-report-age" name="latest-report-age" min="1" max="150" required/>
+        <label for="treatment">Explain the treatment: <br> (e.g. Pre-existing disease of Achondroplasia<br>Yearly medication of Zoledronic acid<br>for Osteoporosis)</label>
+        <textarea cols="28" rows="2" id="treatment" name="treatment" maxlength="1000" required></textarea>
+        <label for="race-ethnicity">Race & Ethnicity: <br> (e.g. South Indian, South Asian, Brown)</label>
+        <textarea cols="28" rows="2" name="race-ethnicity" id="race-ethnicity" maxlength="1000" required></textarea>
+        <div class="cf-turnstile" data-sitekey="{{ .turnstile_site_key }}"></div> 
+        <button type="submit" id="show">Submit</button>
         {{ if .error }}
-            <section class="notice">
-                {{ if eq .error "not_a_valid_password_reset"}}
-                    <p class="error">Passwords must be at least 8 characters long</p>
-                {{ end }}
-            </section>
+        {{ if eq .error "security_challenge_not_completed_research"}}
+        <p class="error">Please verify that you are a human.<br>If you don't see the verification widget,<br>Please refresh page.<br>Report data will not be lost.</p>
+        {{ else if eq .error "security_challenge_failed_research"}}
+        <p class="error">Security challenge failed,<br>Try again later if you are not a bot!</p>
+        {{ else if eq .error "enter_all_required_values_research"}}
+        <p class="error">Please enter all required values.</p>
         {{ end }}
-        <form action="/users/password/change" method="post">
-            <h1>Change Password</h1>
-            {{ field "Password" "password" "" "password" "type=password" }}
-            <input name="id" type="hidden" value="{{ .currentUser.ID }}"/>
-            <div class="actions">
-                <button type="submit" class="button">Change Password</button>
-            </div>
-        </form>
-    </div>
+        {{ end }}
+        {{ if .notice }}
+        {{ if eq .notice "submission_successful_research"}}
+        <p class="notice">Report submitted successfully for research.</p>
+        {{ end }}
+        {{ end }}
+    </form>
 </section>
-
-
-{{ if and .loggedIn (not .currentUser.TwitterConnected) }}
-    <section id="connect">
-        <header>
-            <h1>Connect your Twitter Account</h1>
-        </header>
-        <div class="twitter_login">
-            {{ if .error }}
-                <section class="notice">
-                    {{ if eq .error "failed_twitter_connect"}}
-                        <p class="error">Unable to connect to the Twitter account. Please contact support</p>
-                        <br/>
-                    {{ end }}
-                </section>
-            {{ end }}
-            <section>
-                <p>
-                    <a href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id={{ .clientID }}&redirect_uri={{ .redirectURI }}&scope={{ .twitterScopes }}&state={{.authenticity_token}}&code_challenge={{ .code }}&code_challenge_method=plain"><i>Login
-                            to Twitter &nearr;</i></a>
-                </p>
-            </section>
-        </div>
-    </section>
 {{ end }}
 
-
-{{ if and .loggedIn .currentUser.TwitterConnected }}
-    <section id="topics">
-        <header>
-            <h3>Topic Classification</h3>
-            <p>Get tweets from your followers classified by your favourite topics.</p>
-            <p><sup>PRO TIP</sup>Tweets are classified using Machine Learning, So the topics can be of broader
-                categories instead of just keywords.</p>
-        </header>
-        <div>
-            {{ if .error }}
-                <section class="error">
-                    {{ if eq .error "not_a_valid_topic"}}
-                        <p>Topics should be separated by a comma, can contain alphanumeric, space and are limited to 10
-                            topics.</p>
-                    {{ else if eq .error "not_subscribed"}}
-                        <p>Your trial has ended, You must be subscribed to receive the tweets from your followers,
-                            Please
-                            use the payment button
-                            below to subscribe.</p>
-                    {{ end }}
-                </section>
-            {{ end }}
-            <section>
-                <form action="/users/keyword?redirectURL=/#topics" method="post" id="keywords">
-                    <label>Topics: </label>
-                    <textarea cols="28" rows="5" name="keywords" wrap="hard"
-                              placeholder="Topic 1, Topic 2,...Topic 10"
-                              maxlength="1000">{{ if .currentUser.Keywords }} {{ $length := len .currentUser.Keywords }} {{ range $i, $keyword := .currentUser.Keywords }} {{- $keyword -}}{{if lt $i (subtract $length 1) }},{{ end }}{{ end }}{{ end }}</textarea>
-                    <label>Engagement: </label>
-                    <input type="checkbox" id="action-auto-like" name="autolike" value="True"
-                           {{ if .currentUser.AutoLike }}checked {{ end }}> <label
-                            for="action-auto-like">Auto Like</label>
-                    <input type="checkbox" id="action-email" name="email" value="True"
-                           {{ if .currentUser.Notification }}checked {{ end }}><label
-                            for="action-email">Email Digest</label>
-                    <input name="authenticity_token" type="hidden" value="{{.authenticity_token}}">
-                    <br>
-                    <button type="submit" class="submit_button">SUBMIT</button>
-                </form>
-            </section>
-            {{ if .notice }}
-                <section class="notice">
-                    {{ if eq .notice "topics_removed"}}
-                        <p>Topics have been removed, Tweets from your followers cannot be filtered.</p>
-                    {{ end }}
-                    {{ if eq .notice "topics_added"}}
-                        <p>Topics have been added, Now you will receive tweets from your followers which matches these
-                            topics.</p>
-                    {{ end }}
-                </section>
-            {{ end }}
-        </div>
-    </section>
-{{ end }}
 <hr>
 <section>
         <blockquote>
             <img alt="Quote" src="/assets/images/app/icon-quote.svg" height="80"><br>
-            "After using Bone Health Tracker, I have been able to receive tweets from the followers of my personal, business accounts and engage with them."
+            "After using Bone Health Tracker, I'm able to get better understanding of my bone health and monitor the progress of my treatment."
             <footer><img alt="Bone Health Tracker icon" src="/assets/icons/android-icon-72x72.png" height="36"><br><br><i>- Abishek Muthian, Creator of Bone Health Tracker</i></footer>
         </blockquote>
     <figure>
-        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/dbarghya_das_supershot.png">
-        <figcaption><i>A health need-gap related tweet identified by Bone Health Tracker</i></figcaption>
+        <img alt="screenshot of a BMD report classified by Bone Health Tracker" src="/assets/images/app/table_supershot.png">
+        <figcaption><i>The key metrics from Bone Miner Density(BMD) scan report is automatically detected by Bone Health Tracker</i></figcaption>
     </figure>
     <br/>
     <br/>
     <figure>
-        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/ruhi_supershot.png">
-        <figcaption><i>A product-market-fit related tweet identified by Bone Health Tracker</i></figcaption>
+        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/skeleton_supershot.png">
+        <figcaption><i>Skeleton visualization shows the status of bones from your latest report according to WHO classification.</i></figcaption>
     </figure>
     <br/>
     <br/>
     <figure>
-        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/joe_king_supershot.png">
-        <figcaption><i>A problem-solving related tweet identified by Bone Health Tracker</i></figcaption>
+        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/chart_supershot.png">
+        <figcaption><i>Chart keeps track of the T-scores from your BMD reports and helps you monitor the progress of your treatment.</i></figcaption>
     </figure>
 </section>
 <hr>
-{{/*        <section>
-            <header>
-                <h3>Subscription</h3>
-            </header>
-            <div class="subscription">
-                <form action="{{ if not .currentUser.Subscription }}/subscriptions/create-checkout-session{{ else }}/subscriptions/manage-billing{{ end }}"
-                      method="POST">
-                    <input type="hidden" name="priceId" value="{{ .priceId }}"/>
-                    <input name="authenticity_token" type="hidden" value="{{.authenticity_token}}">
-                    <button type="submit"
-                            class="submit_button">{{ if not .currentUser.Subscription }}{{ .price }}{{ else }} MANAGE BILLING {{ end }}</button>
-                </form>
-            </div>
-            {{ end }}
-            {{ if .notice }}
-                <section class="notice">
-                    {{ if eq .notice "payment_success"}}
-                        <p>Your payment was successful!</p>
-                    {{ end }}
-                </section>
-            {{ end }}
-            {{ if .notice }}
-                <section class="notice">
-                    {{ if eq .notice "payment_failure"}}
-                        <p class="error">Your payment was cancelled. If this was unintentional, You can re-initiate the
-                            subscription payment process by clicking on the price button.</p>
-                    {{ end }}
-                </section>
-            {{ end }}
-        </section>*/}}
+
 <br/>
 <br/>
 <section>
@@ -790,16 +600,6 @@ inkscape:version="0.48.0 r9654"
 <br/>
 <br/>
 
-<section id="pricing">
-    <header>
-        <h3>Pricing</h3>
-    </header>
-    <article>
-        <aside><p>Bone Health Tracker is free during the early access period, No credit card is required to sign-up.</p></aside>
-    </article>
-</section>
-
-
 <section id="faq">
         <header>
             <h3>Frequently Asked Questions</h3>
@@ -808,35 +608,51 @@ inkscape:version="0.48.0 r9654"
             <ul>
                 <li>
                     Why would I use Bone Health Tracker?
-                    <p>To develop meaningful relationship with your followers which results in greater engagements.</p>
+                    <p>To track your bone health or  of your family members. Monitor the progress of bone health treatment. Contribute towards the research of bone health treatments.</p>
                 </li>
                 <li>
-                    How much time do I need to spend to use Bone Health Tracker every day?
-                    <p>None! From sign-up to setting your favourite topics takes less than 5 minutes, Then you're all set; Bone Health Tracker does its magic automatically every day.</p>
+                    What is the Bone Mineral Density(BMD) Test?
+                    <p>BMD test helps to determine whether we have disorders like <b>Osteoporosis</b>, <b>Osteopenia</b> which can make our bones fragile and more likely to break.
+                    <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5335887/">1 in 3 women over the age of 50 years and 1 in 5 men will experience osteoporotic fractures in their lifetime.</a></p>
+                    Here's an <a href="https://www.mayoclinic.org/tests-procedures/bone-density-test/about/pac-20385273" target="_blank">article</a> from Mayo Clinic about Bone density test.
+                    This <a href="https://www.bonehealthandosteoporosis.org/patients/diagnosis-information/bone-density-examtesting/" target="_blank">article</a> from Bone Health & Osteoporosis foundation gives more technical information about the BMD test.
+                </p>
                 </li>
                 <li>
-                    How do I know that Bone Health Tracker is working?
-                    <p>If you have 'Auto Like' enabled you'd find the tweets liked by Bone Health Tracker for you in the Likes section of Twitter and If you have 'Email Digest' enabled you will get a daily digest of tweets matching your chosen topics from your followers.</p>
+                    How does the assessment section of BMD scan report looks like?
+                    <p>Assessment section of BMD scan report is usually located above (or) below the table showing the T-Scores of bones. <b>It doesn't contain any personal information.</b> Upload only the assessment section from your report to Bone Health Tracker.</p>
+                    <figure>
+                        <img alt="Example of a standard BMD scan assessment section" src="/assets/images/app/standard_assessment.jpg">
+                        <figcaption><i>Example of the assessment section of a BMD scan report.</i></figcaption>
+                    </figure>
+                    <figure>
+                        <img alt=" BMD scan sample report" src="/assets/images/app/BDRS-3.png">
+                        <figcaption><i>BMD scan <a href="http://www.mtinformation.com/medical-reports/bone-density-samples" target="_blank">sample report</a>.</i></figcaption>
+                    </figure>
                 </li>
                 <li>
-                    How do I choose my topics?
-                    <p>Since Bone Health Tracker uses machine learning to classify the tweets based on your topics, Choose broad ranging categories for your topics depending upon your needs. If you are using your personal Twitter account with Bone Health Tracker then choose topics which interests you. If you use your business Twitter account, Then choose categories which represent your business so that when your followers tweet about the topic you can engage with them to grow your business.</p>
+                     Occasionally, BMD scores for couple of organs are mismatched?
+                     <p>Sorry about that, Try deleting that report and uploading it again. These occasional issues would be resolved overtime.</p> 
                 </li>
                 <li>
-                    How do I connect additional Twitter account?
-                    <p>Please create another Bone Health Tracker account to add additional Twitter account.</p>
+                     I'm asked to verify that I'm human, But I don't see any verification widget?
+                     <p>The verification usually happens without requiring any action from you, If you don't see the Cloudflare widget then please refresh the page. Your report data will not be lost.</p> 
                 </li>
                 <li>
-                    Is this allowed by Twitter?
-                    <p>Absolutely, Bone Health Tracker uses the official Twitter API and ensures that all guidelines are followed.</p>
+                     Where is my report data stored?
+                  <p>The report data without containing any personal information is <b>stored locally in your browser.</b> If you submit it for research, Its stored in our server.</p> 
                 </li>
                 <li>
-                    Is any private data from my Twitter Account accessed?
-                    <p>No private data is accessed from your Twitter account, Only publicly available data such as your followers and their tweets are accessed and the tweets which match your chosen topics are stored for sending email and deleted after the email is sent.</p>
+                     What type of research is conducted with my BMD data?
+                    <p>The BMD data you submit is currently stored without any personal information. The data is not shared with anyone. I'm currently looking for researchers in the bone health field to collaborate for exploring the data for insights and developing better bone health treatments.</p>
+                </li>
+                <li>
+                    How can I learn more about Osteoporosis?
+                    <p>Here are some resources on Osteoporosis from <a href="https://www.cdc.gov/nchs/fastats/osteoporosis.htm" target="_blank">CDC</a>, <a href="https://www.bones.nih.gov/health-info/bone/SGR/surgeon-generals-report" target="_blank">NIH</a>, <a href="https://www.womenshealth.gov/a-z-topics/osteoporosis" target="_blank">Office On Women's Health</a>.</p>
                 </li>
                 <li>
                     Where can I follow the development of Bone Health Tracker?
-                    <p>I'm building Bone Health Tracker in public, on <a href="https://twitter.com/Abishek_Muthian/status/1542754615464427521" target="_blank">Twitter</a> </p>
+                    <p>You can follow the development of Bone Health Tracker on <a href="https://twitter.com/bonehealthtrack" target="_blank">Twitter</a> </p>
                 </li>
             </ul>
         </div>
@@ -844,13 +660,3 @@ inkscape:version="0.48.0 r9654"
 
 <br/>
 <br/>
-
-<section>
-    <div id="logout">
-        {{if .loggedIn}}
-            <p>
-                <a class="button grey" href="/users/logout" method="post">Logout</a>
-            </p>
-        {{end}}
-    </div>
-</section>

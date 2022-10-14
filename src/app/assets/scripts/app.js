@@ -87,13 +87,17 @@ function ActivateMethodLinks() {
     // Perform a post to the specified url (href of link)
     var url = link.getAttribute("href");
     var data = "authenticity_token=" + token;
+    var redirectURL = link.getAttribute("data-redirect")
 
     DOM.Post(
       url,
       data,
       function (request) {
         // Use the response url to redirect
-        window.location = request.responseURL;
+        // window.location = request.responseURL;
+        
+        // Use the data attribute to redirect
+        window.location = request.responseURL+redirectURL;
       },
       function (request) {
         // Respond to error

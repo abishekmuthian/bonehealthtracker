@@ -86,15 +86,15 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 			if !siteVerify.Success {
 				// Security challenge failed
 				log.Error(log.V{"Upload, Security challenge failed": siteVerify.ErrorCodes[0]})
-				return server.Redirect(w, r, "/?error=security_challenge_failed")
+				return server.Redirect(w, r, "/?error=security_challenge_failed#upload")
 			}
 		} else {
 			log.Error(log.V{"Upload, Security challenge unable to process": "response not received from user"})
-			return server.Redirect(w, r, "/?error=security_challenge_not_completed")
+			return server.Redirect(w, r, "/?error=security_challenge_not_completed#upload")
 		}
 	} else {
 		// Security challenge not completed
-		return server.Redirect(w, r, "/?error=security_challenge_not_completed")
+		return server.Redirect(w, r, "/?error=security_challenge_not_completed#upload")
 	}
 
 	for _, fh := range params.Files {
@@ -265,7 +265,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 				}
 			} else {
 				// No organs found
-				return server.Redirect(w, r, "/?error=not_a_valid_report")
+				return server.Redirect(w, r, "/?error=not_a_valid_report#upload")
 			}
 
 			// Redirect - ideally here we'd redirect to their original request path
@@ -278,7 +278,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 		} else {
 			// Not a valid image
-			return server.Redirect(w, r, "/?error=not_a_valid_report")
+			return server.Redirect(w, r, "/?error=not_a_valid_report#upload")
 		}
 
 	}

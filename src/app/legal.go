@@ -4,14 +4,12 @@ import (
 	"net/http"
 
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/server/config"
-	"github.com/abishekmuthian/bonehealthtracker/src/lib/stats"
 	"github.com/abishekmuthian/bonehealthtracker/src/lib/view"
 )
 
 // HandlePrivacy displays the home page
 // responds to GET /privacy
 func HandleLegal(w http.ResponseWriter, r *http.Request) error {
-	stats.RegisterHit(r)
 
 	// Render the template
 	view := view.NewRenderer(w, r)
