@@ -7,18 +7,18 @@
     </header>
     <aside>
         <img alt="Twitter logo" src="/assets/images/app/joint.png" height="150">
-        <h3>Multiple Bones</h3>
-        <p>Tack the health of your Spine, Hip, Femur etc.</p>
+        <h3>Multiple Bone Sites</h3>
+        <p>Tack the health of your Spine, Hip, Femur, Femur Neck and Forearm using your historical and current BMD scan test reports.</p>
     </aside>
     <aside>
         <img alt="A brain and gear icon to signify machine learning" src="/assets/images/app/machine-learning.png" height="150">
         <h3>Machine Learning</h3>
-        <p>Uses Machine Learning to identify key metrics from the BMD report automatically.</p>
+        <p>Uses Machine Learning to identify key metrics from the BMD report automatically. No need to enter confusing numbers manually.</p>
     </aside>
     <aside>
         <img alt="Lock and software UI depicting privacy" src="/assets/images/app/security.png" height="150">
         <h3>Private</h3>
-        <p>No personal data is shared with anyone.</p>
+        <p>No Protected Health Information (“PHI”) is collected (or) shared with anyone. Report data is stored locally in your browser.</p>
     </aside>
 </section>
 <hr>
@@ -568,7 +568,7 @@ inkscape:version="0.48.0 r9654"
         </blockquote>
     <figure>
         <img alt="screenshot of a BMD report classified by Bone Health Tracker" src="/assets/images/app/table_supershot.png">
-        <figcaption><i>The key metrics from Bone Miner Density(BMD) scan report is automatically detected by Bone Health Tracker</i></figcaption>
+        <figcaption><i>The key metrics from Bone Miner Density(BMD) scan report is automatically detected by Bone Health Tracker.</i></figcaption>
     </figure>
     <br/>
     <br/>
@@ -631,8 +631,12 @@ inkscape:version="0.48.0 r9654"
                     </figure>
                 </li>
                 <li>
-                     Occasionally, BMD scores for couple of organs are mismatched?
+                     Occasionally, BMD scores for couple of bone sites are mismatched?
                      <p>Sorry about that, Try deleting that report and uploading it again. These occasional issues would be resolved overtime.</p> 
+                </li>
+                <li>
+                     Bone Health Tracker doesn't show a bone site present in my BMD report?
+                  <p>Bone Health Tracker currently shows data from common bone sites like Spine, Hip, Femur, Femur Neck and Forearm. Support for uncommon sites would be added upon request, Please reach out to me.</p> 
                 </li>
                 <li>
                      I'm asked to verify that I'm human, But I don't see any verification widget?
@@ -649,6 +653,16 @@ inkscape:version="0.48.0 r9654"
                 <li>
                     How can I learn more about Osteoporosis?
                     <p>Here are some resources on Osteoporosis from <a href="https://www.cdc.gov/nchs/fastats/osteoporosis.htm" target="_blank">CDC</a>, <a href="https://www.bones.nih.gov/health-info/bone/SGR/surgeon-generals-report" target="_blank">NIH</a>, <a href="https://www.womenshealth.gov/a-z-topics/osteoporosis" target="_blank">Office On Women's Health</a>.</p>
+                </li>
+                <li>
+                    Why did you build this?
+                    <p>
+                      <video width="100%" height="auto" controls preload="metadata">
+                        <source src="/assets/videos/bht_demo.m4v" type="video/mp4">
+                        <track label="English" kind="subtitles" srclang="en-IN" src="/assets/videos/bht_demo.vtt" default>
+                        Watch this video on <a href="https://youtu.be/5F_4vry5EJ4">YouTube</a>.
+                      </video>
+                    </p>
                 </li>
                 <li>
                     Where can I follow the development of Bone Health Tracker?

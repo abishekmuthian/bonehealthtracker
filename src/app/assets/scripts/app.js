@@ -1,5 +1,5 @@
 DOM.Ready(function () {
-  // Insert CSRF tokens into forms
+  // Handle theme
   window.onload = HandleDarkMode();
 
   // Perform AJAX post on click on method=post|delete anchors
@@ -19,21 +19,40 @@ function ToggleDarkMode() {
   if (bodyTag.classList.contains("lightMode")) {
     bodyTag.classList.replace("lightMode", "darkMode");
     toggleTag.innerHTML = "Light Mode";
+    setCookie("theme", "dark");
   } else {
     bodyTag.classList.replace("darkMode", "lightMode");
     toggleTag.innerHTML = "Dark Mode";
+    setCookie("theme", "light");
   }
 }
 
 function HandleDarkMode() {
-  let bodyTag = document.getElementsByTagName("body")[0];
   let toggleTag = document.getElementById("colorToggle");
-  if (
+  let bodyTag = document.getElementsByTagName("body")[0];
+  // Not setting dark mode automatically due to the bug in Chromium on Linux.
+  /*   
+   if (
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches
   ) {
     bodyTag.classList.add("darkMode");
     toggleTag.innerHTML = "Light Mode";
+  } else {
+    bodyTag.classList.add("lightMode");
+    toggleTag.innerHTML = "Dark Mode";
+  } */
+
+  theme = getCookie("theme");
+
+  if (theme) {
+    if (theme === "light") {
+      bodyTag.classList.add("lightMode");
+      toggleTag.innerHTML = "Dark Mode";
+    } else {
+      bodyTag.classList.add("darkMode");
+      toggleTag.innerHTML = "Light Mode";
+    }
   } else {
     bodyTag.classList.add("lightMode");
     toggleTag.innerHTML = "Dark Mode";
@@ -87,7 +106,7 @@ function ActivateMethodLinks() {
     // Perform a post to the specified url (href of link)
     var url = link.getAttribute("href");
     var data = "authenticity_token=" + token;
-    var redirectURL = link.getAttribute("data-redirect")
+    var redirectURL = link.getAttribute("data-redirect");
 
     DOM.Post(
       url,
@@ -95,9 +114,9 @@ function ActivateMethodLinks() {
       function (request) {
         // Use the response url to redirect
         // window.location = request.responseURL;
-        
+
         // Use the data attribute to redirect
-        window.location = request.responseURL+redirectURL;
+        window.location = request.responseURL + redirectURL;
       },
       function (request) {
         // Respond to error
@@ -318,6 +337,19 @@ function getCookie(cname) {
     }
   }
   return "";
+}
+
+function setCookie(cname, cvalue, exdays) {
+  let expires;
+  if (exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    expires = "expires=" + d.toUTCString();
+  } else {
+    expires = "Tue, 19 Jan 2038 04:14:07 GMT";
+  }
+
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function transparentize(value, opacity) {
