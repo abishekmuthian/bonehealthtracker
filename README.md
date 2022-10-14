@@ -53,7 +53,7 @@ $ pip3 install "uvicorn[standard]"
         $ uvicorn main:app --host 0.0.0.0 --port 8000
 
 Note: 
-1. In production, I use gunicorn with multiple workers for greater performance as found in `/backup/server_scripts/gunicorn.service`. 
+1. In production, I use gunicorn with multiple workers for greater performance as found in `/backup/server_scripts/gunicorn.service`. For using [gunicorn](https://gunicorn.org/), It needs to be installed along with uvicorn as detailed earlier.
 
 
 ### Configuration
