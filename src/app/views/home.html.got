@@ -568,7 +568,7 @@ inkscape:version="0.48.0 r9654"
         </blockquote>
     <figure>
         <img alt="screenshot of a BMD report classified by Bone Health Tracker" src="/assets/images/app/table_supershot.png">
-        <figcaption><i>The key metrics from Bone Miner Density(BMD) scan report is automatically detected by Bone Health Tracker.</i></figcaption>
+        <figcaption><i>The key metrics from Bone Mineral Density(BMD) scan report is automatically detected by Bone Health Tracker.</i></figcaption>
     </figure>
     <br/>
     <br/>
@@ -580,7 +580,7 @@ inkscape:version="0.48.0 r9654"
     <br/>
     <figure>
         <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/chart_supershot.png">
-        <figcaption><i>Chart keeps track of the T-scores from your BMD reports and helps you monitor the progress of your treatment.</i></figcaption>
+        <figcaption><i>The Chart keeps track of the T-scores from your BMD reports and helps you monitor the progress of your treatment.</i></figcaption>
     </figure>
 </section>
 <hr>

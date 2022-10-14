@@ -21,10 +21,10 @@
                 Bone Health Tracker uses the following services for analyzing the assessment section of the BMD report which doesn't contain any personal data.
                 <ul>
                     <li>
-                        <a href="https://aws.amazon.com/textract/faqs/" target="_blank">AWS Textract</a>
+                        <a href="https://aws.amazon.com/textract/faqs/" target="_blank">Amazon Textract</a>
                     </li>
                     <li>
-                        <a href="https://aws.amazon.com/comprehend/medical/faqs/" target="_blank">AWS Comprehend Medical</a>
+                        <a href="https://aws.amazon.com/comprehend/medical/faqs/" target="_blank">Amazon Comprehend Medical</a>
                     </li>
                 </ul>
             </p>

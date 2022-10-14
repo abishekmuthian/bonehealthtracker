@@ -15,7 +15,7 @@ Bone Health Tracker helps us visualize and monitor our bone health through **Bon
 Clicking the above image would open the demo video in YouTube.
 
 ### Technical How
-1. BMD report is extracted by [AWS Textract](https://aws.amazon.com/textract/) classified by the [AWS Comprehend Medical](https://aws.amazon.com/comprehend/medical/) in the python middleware. 
+1. BMD report is extracted by [Amazon Textract](https://aws.amazon.com/textract/) classified by the [Amazon Comprehend Medical](https://aws.amazon.com/comprehend/medical/) in the python middleware. 
 2. The medical data is processed by the parser and **any personal identifiable information is ignored**.
 3. Parser returns T-Scores and BMD scores for individual organs.
 4. The data is stored in a client Cookie, The Cookie is updated with new reports.
@@ -45,7 +45,7 @@ Install **uvicorn**
 $ pip3 install "uvicorn[standard]"
 ```
 
-1. Setup [AWS Textract](https://aws.amazon.com/textract/) and [AWS Comprehend Medical](https://aws.amazon.com/comprehend/medical/) using CLI.
+1. Setup [Amazon Textract](https://aws.amazon.com/textract/) and [Amazon Comprehend Medical](https://aws.amazon.com/comprehend/medical/) using CLI.
 
 2. Run the service in the bonehealthtracker folder, 
 
@@ -90,7 +90,7 @@ After ensuring that the Machine Learning Server is running,
    - BDRS-2.png is another medical transcription type with normal bone density.
 
 ### Miscellaneous Testing Notes
-Occasionally, AWS Comprehend Medical returns wrong order for BMD scores and thereby mismatching the BMD score for the organs. Deleting the report and Uploading it again fixes the issue.
+Occasionally, Amazon Comprehend Medical returns wrong order for BMD scores and thereby mismatching the BMD score for the organs. Deleting the report and Uploading it again fixes the issue.
 
 ### Copyright and Licenses
 © 2022 Abishek Muthian https://bonehealthtracker.com.
