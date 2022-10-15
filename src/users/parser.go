@@ -101,9 +101,11 @@ func Parse(dexaData []byte) []Organ {
 							!strings.Contains(text, "high") &&
 							!strings.Contains(text, "normal") &&
 							!strings.Contains(text, "g/cm2") &&
+							!strings.Contains(text, "gm/cm2") &&
+							!strings.Contains(text, "gm per cm2") &&
 							!strings.Contains(text, "g/cm²") {
 
-							if f, err := strconv.ParseFloat(text, 64); err == nil && f < 2.0 {
+							if f, err := strconv.ParseFloat(text, 64); err == nil && f < 1.5 {
 
 								b := BMD{
 									text:        f,
@@ -172,9 +174,11 @@ func Parse(dexaData []byte) []Organ {
 									!strings.Contains(text, "high") &&
 									!strings.Contains(text, "normal") &&
 									!strings.Contains(text, "g/cm2") &&
+									!strings.Contains(text, "gm/cm2") &&
+									!strings.Contains(text, "gm per cm2") &&
 									!strings.Contains(text, "g/cm²") {
 
-									if f, err := strconv.ParseFloat(text, 64); err == nil && f < 2.0 {
+									if f, err := strconv.ParseFloat(text, 64); err == nil && f < 1.5 {
 
 										b := BMD{
 											text:        f,
@@ -209,9 +213,11 @@ func Parse(dexaData []byte) []Organ {
 										!strings.Contains(text, "high") &&
 										!strings.Contains(text, "normal") &&
 										!strings.Contains(text, "g/cm2") &&
+										!strings.Contains(text, "gm/cm2") &&
+										!strings.Contains(text, "gm per cm2") &&
 										!strings.Contains(text, "g/cm²") {
 
-										if f, err := strconv.ParseFloat(text, 64); err == nil && f < 2.0 {
+										if f, err := strconv.ParseFloat(text, 64); err == nil && f < 1.5 {
 
 											b := BMD{
 												text:        f,
@@ -244,9 +250,11 @@ func Parse(dexaData []byte) []Organ {
 									!strings.Contains(text, "high") &&
 									!strings.Contains(text, "normal") &&
 									!strings.Contains(text, "g/cm2") &&
+									!strings.Contains(text, "gm/cm2") &&
+									!strings.Contains(text, "gm per cm2") &&
 									!strings.Contains(text, "g/cm²") {
 
-									if f, err := strconv.ParseFloat(text, 64); err == nil && f < 2.0 {
+									if f, err := strconv.ParseFloat(text, 64); err == nil && (f >= -5.0 && f <= 2.5) {
 
 										t := tScore{
 											text:        f,
@@ -278,9 +286,11 @@ func Parse(dexaData []byte) []Organ {
 									!strings.Contains(text, "high") &&
 									!strings.Contains(text, "normal") &&
 									!strings.Contains(text, "g/cm2") &&
+									!strings.Contains(text, "gm/cm2") &&
+									!strings.Contains(text, "gm per cm2") &&
 									!strings.Contains(text, "g/cm²") {
 
-									if f, err := strconv.ParseFloat(text, 64); err == nil && f < 2.0 {
+									if f, err := strconv.ParseFloat(text, 64); err == nil && (f >= -2.5 && f <= 2.5) {
 
 										z := zScore{
 											text:        f,
@@ -310,10 +320,10 @@ func Parse(dexaData []byte) []Organ {
 	   	log.Info(log.V{"Parser, T-Scores": tScores})
 	   	log.Info(log.V{"Parser, Z-Scores": zScores}) */
 
-	return setOrganValues(organs, directions, tScores, bmds)
+	return setOrganValues(organs, directions, tScores, zScores, bmds)
 }
 
-func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bmds []BMD) []Organ {
+func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zScores []zScore, bmds []BMD) []Organ {
 
 	var organBeginOffsets, organEndOffsets []float64
 	var tempOrgans []Organ
@@ -391,6 +401,7 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 
 	organs = tempOrgans
 
+	// Find T-scores for the organs
 	if len(tScores) != len(organs) {
 		organBeginOffsets = []float64{}
 		organEndOffsets = []float64{}
@@ -417,6 +428,36 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, bm
 	} else {
 		for i, tScore := range tScores {
 			organs[i].TScore = tScore.text
+		}
+	}
+
+	// Find Z-scores for the organs
+	if len(zScores) != len(organs) {
+		organBeginOffsets = []float64{}
+		organEndOffsets = []float64{}
+
+		for _, organ := range organs {
+
+			organBeginOffsets = append(organBeginOffsets, organ.BeginOffset)
+			organEndOffsets = append(organEndOffsets, organ.EndOffset)
+
+		}
+
+		for _, zScore := range zScores {
+
+			closestBeginOffsetIndex := findClosestElementIndex(organBeginOffsets, 1, zScore.endOffset)
+			closestEndOffsetIndex := findClosestElementIndex(organEndOffsets, 1, zScore.beginOffset)
+
+			if math.Abs(organBeginOffsets[closestBeginOffsetIndex]-zScore.endOffset) > math.Abs(zScore.beginOffset-organEndOffsets[closestEndOffsetIndex]) {
+				organs[closestEndOffsetIndex].ZScore = zScore.text
+			} else {
+				organs[closestBeginOffsetIndex].ZScore = zScore.text
+			}
+
+		}
+	} else {
+		for i, zScore := range zScores {
+			organs[i].ZScore = zScore.text
 		}
 	}
 

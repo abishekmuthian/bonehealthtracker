@@ -77,10 +77,12 @@
                                 <th><mark>{{ $dexa.Year }}</mark></th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th>Site</th>
                                 <th>T-score</th>
+                                <th>Z-score</th>
                                 <th>BMD</th>
                             </tr>
                         </thead>
@@ -89,6 +91,7 @@
                         <tr>
                             <td>{{ $organ.Direction }}  {{ $organ.Site }}</td>
                             <td>{{ $organ.TScore }}</td>
+                            <td>{{ $organ.ZScore }}</td>
                             <td>{{ $organ.Bmd }}</td>
                         </tr>
                         {{ end }}
@@ -510,14 +513,25 @@ inkscape:version="0.48.0 r9654"
 </section>  
 
 <br>
-
-<section id="chart">
+<section id="chart-tscore">
         <header>
-            <h2>Chart</h2>
-            <p>The progress of your treatment can be ascertained via these charts.</p>
+            <h2>T-score Chart</h2>
+            <p>The T-score on your bone density report shows how much your bone mass differs from the bone mass of an average healthy 30 year old adult.</p>
         </header>
         <div>
             <canvas id="tScoreChart" width="400" height="400"></canvas>
+        </div>
+</section>
+
+<br>
+<section id="chart-zscore">
+        <header>
+            <h2>Z-score Chart</h2>
+            <p>Z-score is a comparison of your individual bone mineral density (BMD) to what is expected for a person of the same age and sex.</p>
+            <small>Z-scores values would be all zeros if the report didn't include them.</small>
+        </header>
+        <div>
+            <canvas id="zScoreChart" width="400" height="400"></canvas>
         </div>
 </section>
 
@@ -573,13 +587,19 @@ inkscape:version="0.48.0 r9654"
     <br/>
     <br/>
     <figure>
-        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/skeleton_supershot.png">
+      <img alt="screenshot of a BMD report classified by Bone Health Tracker" src="/assets/images/app/table2_supershot.png">
+      <figcaption><i>Report table with automatically classified Z-scores along with T-scores and BMDs in Bone Health Tracker.</i></figcaption>
+  </figure>
+  <br/>
+  <br/>
+    <figure>
+        <img alt="screenshot of a skeleton visualization in Bone Health Tracker" src="/assets/images/app/skeleton_supershot.png">
         <figcaption><i>Skeleton visualization shows the status of bones from your latest report according to WHO classification.</i></figcaption>
     </figure>
     <br/>
     <br/>
     <figure>
-        <img alt="screenshot of a tweet classified by Bone Health Tracker" src="/assets/images/app/chart_supershot.png">
+        <img alt="screenshot of a chart visualization in Bone Health Tracker" src="/assets/images/app/chart_supershot.png">
         <figcaption><i>The Chart keeps track of the T-scores from your BMD reports and helps you monitor the progress of your treatment.</i></figcaption>
     </figure>
 </section>
@@ -612,21 +632,22 @@ inkscape:version="0.48.0 r9654"
                 </li>
                 <li>
                     What is the Bone Mineral Density(BMD) Test?
-                    <p>BMD test helps to determine whether we have disorders like <b>Osteoporosis</b>, <b>Osteopenia</b> which can make our bones fragile and more likely to break.
+                    <p>A <a href="https://en.wikipedia.org/wiki/Bone_density" target="_blank">BMD</a> test helps to determine whether we have disorders like <b>Osteoporosis</b>, <b>Osteopenia</b> which can make our bones fragile and more likely to break.
                     <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5335887/">1 in 3 women over the age of 50 years and 1 in 5 men will experience osteoporotic fractures in their lifetime.</a></p>
                     Here's an <a href="https://www.mayoclinic.org/tests-procedures/bone-density-test/about/pac-20385273" target="_blank">article</a> from Mayo Clinic about Bone density test.
-                    This <a href="https://www.bonehealthandosteoporosis.org/patients/diagnosis-information/bone-density-examtesting/" target="_blank">article</a> from Bone Health & Osteoporosis foundation gives more technical information about the BMD test.
+                    This <a href="https://www.bonehealthandosteoporosis.org/patients/diagnosis-information/bone-density-examtesting/" target="_blank">article</a> from Bone Health & Osteoporosis foundation gives more technical information about the BMD test. 
+                    Learn about T-score and Z-score <a href="https://americanbonehealth.org/bone-density/understanding-the-bone-density-t-score-and-z-score/" target="_blank">here</a>.
                 </p>
                 </li>
                 <li>
                     How does the assessment section of BMD scan report looks like?
                     <p>Assessment section of BMD scan report is usually located above (or) below the table showing the T-Scores of bones. <b>It doesn't contain any personal information.</b> Upload only the assessment section from your report to Bone Health Tracker.</p>
-                    <figure>
-                        <img alt="Example of a standard BMD scan assessment section" src="/assets/images/app/standard_assessment.jpg">
+                    1.<figure>
+                        <img alt="Example of a standard BMD scan assessment section with only T-scores" src="/assets/images/app/standard_assessment.jpg">
                         <figcaption><i>Example of the assessment section of a BMD scan report.</i></figcaption>
                     </figure>
-                    <figure>
-                        <img alt=" BMD scan sample report" src="/assets/images/app/BDRS-3.png">
+                    2.<figure>
+                        <img alt=" BMD scan sample report with both T-scores & Z-scores" src="/assets/images/app/BDRS-2.png">
                         <figcaption><i>BMD scan <a href="http://www.mtinformation.com/medical-reports/bone-density-samples" target="_blank">sample report</a>.</i></figcaption>
                     </figure>
                 </li>
@@ -641,6 +662,10 @@ inkscape:version="0.48.0 r9654"
                 <li>
                      I'm asked to verify that I'm human, But I don't see any verification widget?
                      <p>The verification usually happens without requiring any action from you, If you don't see the Cloudflare widget then please refresh the page. Your report data will not be lost.</p> 
+                </li>
+                <li>
+                     What is the maximum number of reports displayed?
+                     <p>You can have a maximum number of 4 reports in the Bone Health Tracker.</p>
                 </li>
                 <li>
                      Where is my report data stored?

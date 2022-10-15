@@ -159,15 +159,24 @@ function ActivateChart() {
     // console.log("Value in reports after retrieving cookie: ", reports);
 
     let labels = [];
-    let datasets = [];
+    let tScoreDatasets = [];
+    let zScoreDatasets = [];
     let apSpineTScore = [];
+    let apSpineZScore = [];
     let leftFemurNeckTScore = [];
+    let leftFemurNeckZScore = [];
     let rightFemurNeckTScore = [];
+    let rightFemurNeckZScore = [];
     let leftFemurTScore = [];
+    let leftFemurZScore = [];
     let rightFemurTScore = [];
+    let rightFemurZScore = [];
     let forearmTScore = [];
+    let forearmZScore = [];
     let rightHipTScore = [];
+    let rightHipZScore = [];
     let leftHipTScore = [];
+    let leftHipZScore = [];
 
     for (let i = 0; i < reports.dexas.length; i++) {
       var dexa = reports.dexas[i];
@@ -183,48 +192,61 @@ function ActivateChart() {
         switch (site) {
           case "ap spine l1-l4":
             apSpineTScore.push(organ.tScore);
+            apSpineZScore.push(organ.zScore);
             break;
           case "l1 through l4":
             apSpineTScore.push(organ.tScore);
+            apSpineZScore.push(organ.zScore);
             break;
           case "l1-l4":
             apSpineTScore.push(organ.tScore);
+            apSpineZScore.push(organ.zScore);
             break;
           case "ap lumbar spine":
             apSpineTScore.push(organ.tScore);
+            apSpineZScore.push(organ.zScore);
             break;
           case "left femur neck":
             leftFemurNeckTScore.push(organ.tScore);
+            leftFemurNeckZScore.push(organ.zScore);
             break;
           case "left femoral neck":
             leftFemurNeckTScore.push(organ.tScore);
+            leftFemurNeckZScore.push(organ.zScore);
             break;
           case "right femur neck":
             rightFemurNeckTScore.push(organ.tScore);
+            rightFemurNeckZScore.push(organ.zScore);
             break;
           case "right femoral neck":
             rightFemurNeckTScore.push(organ.tScore);
+            rightFemurNeckZScore.push(organ.zScore);
             break;
           case "left femur":
             leftFemurTScore.push(organ.tScore);
+            leftFemurZScore.push(organ.zScore);
             break;
           case "right femur":
             rightFemurTScore.push(organ.tScore);
+            rightFemurZScore.push(organ.zScore);
             break;
           case "forearm":
             forearmTScore.push(organ.tScore);
+            forearmZScore.push(organ.zScore);
             break;
           case "left hip":
             leftHipTScore.push(organ.tScore);
+            leftHipZScore.push(organ.zScore);
             break;
           case "right hip":
             rightHipTScore.push(organ.tScore);
+            rightHipZScore.push(organ.zScore);
         }
       }
     }
 
     if (apSpineTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "AP Spine L1-L4",
         borderColor: CHART_COLORS.red,
         backgroundColor: transparentize(CHART_COLORS.red, 0.5),
@@ -232,8 +254,17 @@ function ActivateChart() {
       });
     }
 
+    if (apSpineZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "AP Spine L1-L4",
+        borderColor: CHART_COLORS.red,
+        backgroundColor: transparentize(CHART_COLORS.red, 0.5),
+        data: apSpineZScore,
+      });
+    }
+
     if (leftFemurNeckTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Left Femur Neck",
         borderColor: CHART_COLORS.blue,
         backgroundColor: transparentize(CHART_COLORS.blue, 0.5),
@@ -241,8 +272,17 @@ function ActivateChart() {
       });
     }
 
+    if (leftFemurNeckZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Left Femur Neck",
+        borderColor: CHART_COLORS.blue,
+        backgroundColor: transparentize(CHART_COLORS.blue, 0.5),
+        data: leftFemurNeckZScore,
+      });
+    }
+
     if (rightFemurNeckTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Right Femur Neck",
         borderColor: CHART_COLORS.orange,
         backgroundColor: transparentize(CHART_COLORS.orange, 0.5),
@@ -250,8 +290,17 @@ function ActivateChart() {
       });
     }
 
+    if (rightFemurNeckZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Right Femur Neck",
+        borderColor: CHART_COLORS.orange,
+        backgroundColor: transparentize(CHART_COLORS.orange, 0.5),
+        data: rightFemurNeckZScore,
+      });
+    }
+
     if (leftFemurTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Left Femur",
         borderColor: CHART_COLORS.green,
         backgroundColor: transparentize(CHART_COLORS.green, 0.5),
@@ -259,8 +308,17 @@ function ActivateChart() {
       });
     }
 
+    if (leftFemurZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Left Femur",
+        borderColor: CHART_COLORS.green,
+        backgroundColor: transparentize(CHART_COLORS.green, 0.5),
+        data: leftFemurZScore,
+      });
+    }
+
     if (rightFemurTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Right Femur",
         borderColor: CHART_COLORS.yellow,
         backgroundColor: transparentize(CHART_COLORS.yellow, 0.5),
@@ -268,8 +326,17 @@ function ActivateChart() {
       });
     }
 
+    if (rightFemurZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Right Femur",
+        borderColor: CHART_COLORS.yellow,
+        backgroundColor: transparentize(CHART_COLORS.yellow, 0.5),
+        data: rightFemurZScore,
+      });
+    }
+
     if (forearmTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Forearm",
         borderColor: CHART_COLORS.purple,
         backgroundColor: transparentize(CHART_COLORS.purple, 0.5),
@@ -277,8 +344,17 @@ function ActivateChart() {
       });
     }
 
+    if (forearmZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Forearm",
+        borderColor: CHART_COLORS.purple,
+        backgroundColor: transparentize(CHART_COLORS.purple, 0.5),
+        data: forearmZScore,
+      });
+    }
+
     if (rightHipTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Right Hip",
         borderColor: CHART_COLORS.pink,
         backgroundColor: transparentize(CHART_COLORS.pink, 0.5),
@@ -286,8 +362,17 @@ function ActivateChart() {
       });
     }
 
+    if (rightHipZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Right Hip",
+        borderColor: CHART_COLORS.pink,
+        backgroundColor: transparentize(CHART_COLORS.pink, 0.5),
+        data: rightHipZScore,
+      });
+    }
+
     if (leftHipTScore.length > 0) {
-      datasets.push({
+      tScoreDatasets.push({
         label: "Left Hip",
         borderColor: CHART_COLORS.maroon,
         backgroundColor: transparentize(CHART_COLORS.maroon, 0.5),
@@ -295,15 +380,27 @@ function ActivateChart() {
       });
     }
 
+    if (leftHipZScore.length > 0) {
+      zScoreDatasets.push({
+        label: "Left Hip",
+        borderColor: CHART_COLORS.maroon,
+        backgroundColor: transparentize(CHART_COLORS.maroon, 0.5),
+        data: leftHipZScore,
+      });
+    }
+
     // console.log("datasets: ", datasets);
 
     if (reports.dexas.length > 0) {
-      ctx = document.getElementById("tScoreChart").getContext("2d");
-      chart = new Chart(ctx, {
+      // Set T-score dataset
+      tScoreCtx = document.getElementById("tScoreChart").getContext("2d");
+      zScoreCtx = document.getElementById("zScoreChart").getContext("2d");
+
+      tScoreChart = new Chart(tScoreCtx, {
         type: "line",
         data: {
           labels: labels,
-          datasets: datasets,
+          datasets: tScoreDatasets,
         },
         options: {
           responsive: true,
@@ -314,11 +411,34 @@ function ActivateChart() {
             },
             title: {
               display: true,
-              text: "Bone Health Tracker",
+              text: "Bone Health Tracker (T-score)",
             },
           },
         },
       });
+
+      zScoreChart = new Chart(zScoreCtx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: zScoreDatasets,
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: "Bone Health Tracker (Z-score)",
+            },
+          },
+        },
+      });
+
+
     }
   }
 }
