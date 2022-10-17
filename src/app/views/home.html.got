@@ -41,6 +41,10 @@
             <p class="error">Security challenge failed,<br>Try again later if you are not a bot!</p>
             {{ else if eq .error "not_a_valid_report"}}
             <p class="error">Not a valid Dexa scan report,<br>Please upload photo(.jpg/.png) of the<br>assessment section from the Dexa(BMD)<br>scan report.</p>
+            {{ else if eq .error "max_reports_reached"}}
+            <p class="error">You are already displaying the maximum<br> number of reports, Please delete<br> an existing report and try again.</p>
+            {{ else if eq .error "image_oversize"}}
+            <p class="error">Image size is over 5MB,<br> Please upload only the assessment section,<br> File size should be less than 5MB.</p> 
             {{ end }}
             {{ end }}
         </form>
@@ -54,22 +58,6 @@
                 <h2>Reports</h2>
                 <p>Your added report is processed and displayed here, Use the Upload section to add next report (or) delete button to delete last report.</p>
             </header>
-                 <!-- <form>
-                    {{range $dexa := $report.Dexas}}
-                         <h3 class="year"><mark>{{ $dexa.Year }}</mark></h3>
-                         {{ $organs := $dexa.Organs}}
-                         {{ range $organ := $organs }}
-                         <h4>{{ $organ.Direction }}  {{ $organ.Site }}</h4>
-                         <label for="tscore">TScore:</label>
-                         <input id="tscore" type="number" step="0.1" min="-10" max="3"  value="{{ $organ.TScore }}"/>
-                         <label for="bmd">BMD:</label>
-                         <input id="bmd" type="number"  step = "0.001" min="0.001" max="3" value="{{ $organ.Bmd }}"/>
-                         {{ end }}
-                         <hr>
-                    {{end}}
-                </form> -->
-
-                
                     {{range $dexa := $report.Dexas}}
                     <table>
                         <thead>
@@ -545,6 +533,16 @@ inkscape:version="0.48.0 r9654"
     </header>
 
     <form action="/users/update" method="post" id="research-form">
+      <header>
+        <h2>Bone Health Research</h2>
+      </header>
+
+        <label for="sex">Biological Sex:</label>
+        <select id="sex" name="sex" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
         <label for="first-report-age">Age in the first  report:</label>
         <input type="number" id="first-report-age" name="first-report-age" min="1" max="150" required/>
         <label for="latest-report-age">Age in the latest report:</label>
@@ -647,8 +645,16 @@ inkscape:version="0.48.0 r9654"
                         <figcaption><i>Example of the assessment section of a BMD scan report.</i></figcaption>
                     </figure>
                     2.<figure>
-                        <img alt=" BMD scan sample report with both T-scores & Z-scores" src="/assets/images/app/BDRS-2.png">
+                        <img alt="BMD scan sample report with both T-scores & Z-scores" src="/assets/images/app/BDRS-2.png">
                         <figcaption><i>BMD scan <a href="http://www.mtinformation.com/medical-reports/bone-density-samples" target="_blank">sample report</a>.</i></figcaption>
+                    </figure>
+                </li>
+                <li>
+                    There is no assessment section like that in my report?
+                    <p>If your report doesn't have an assessment section like above (or) if it contains only a table with the scores; You can create your own assessment section with a word processor as shown below. You can download the <a href="/assets/downloads/BMD_Assessment_template.odt">Template</a> for the same.</p>
+                    <figure>
+                      <img alt="A template for the assessment section of BMD report" src="/assets/images/app/bmd_assessment_template.png">
+                      <figcaption><i>BMD Assessment section template.</i></figcaption>
                     </figure>
                 </li>
                 <li>
@@ -660,12 +666,16 @@ inkscape:version="0.48.0 r9654"
                   <p>Bone Health Tracker currently shows data from common bone sites like Spine, Hip, Femur, Femur Neck and Forearm. Support for uncommon sites would be added upon request, Please reach out to me.</p> 
                 </li>
                 <li>
+                     Wrong year is displayed for a bone?
+                   <p>If a later report contains a new bone site, Then it could be shown as belonging to different year. Usually, Consecutive reports have same bone sites for a patient.</p>  
+                </li>
+                <li>
                      I'm asked to verify that I'm human, But I don't see any verification widget?
                      <p>The verification usually happens without requiring any action from you, If you don't see the Cloudflare widget then please refresh the page. Your report data will not be lost.</p> 
                 </li>
                 <li>
                      What is the maximum number of reports displayed?
-                     <p>You can have a maximum number of 4 reports in the Bone Health Tracker.</p>
+                     <p>You can have a maximum number of 3-4 reports in the Bone Health Tracker.</p>
                 </li>
                 <li>
                      Where is my report data stored?

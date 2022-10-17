@@ -90,8 +90,9 @@ After ensuring that the Machine Learning Server is running,
    - BDRS-2.png is another medical transcription type with normal bone density.
 
 ### Miscellaneous Testing Notes
-1. Occasionally, Amazon Comprehend Medical returns wrong order for BMD scores and thereby mismatching the BMD score for the organs. Deleting the report and Uploading it again fixes the issue.
-2. Bone Health Tracker can currently display utmost 4 reports due to limitations with cookie size.
+1. Occasionally, Amazon Comprehend Medical returns incorrect offset for the BMD scores and thereby mismatching the BMD score for those bone site. Deleting the report and Uploading it again fixes the issue.
+2. Bone Health Tracker can currently display utmost 3-4 reports due to limitations with cookie size.
+3. If a later report contains a new bone site, Then it could be shown as belonging to different year. Usually, Consecutive reports have same bone sites for a patient.
 
 ### Copyright and Licenses
 © 2022 Abishek Muthian https://bonehealthtracker.com.

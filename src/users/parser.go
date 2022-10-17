@@ -125,7 +125,8 @@ func Parse(dexaData []byte) []Organ {
 
 				if u.(map[string]interface{})["Category"] == "ANATOMY" {
 					if u.(map[string]interface{})["Type"] == "SYSTEM_ORGAN_SITE" {
-						log.Info(log.V{"Paser, Organ": u.(map[string]interface{})["Text"]})
+						// Disabling log for privacy
+						// log.Info(log.V{"Paser, Organ": u.(map[string]interface{})["Text"]})
 
 						text := strings.ToLower(u.(map[string]interface{})["Text"].(string))
 
@@ -504,7 +505,8 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 
 	organs = tempOrgans
 
-	log.Info(log.V{"Parser, Organs after setting values": organs})
+	// Disabling log for privacy
+	// log.Info(log.V{"Parser, Organs after setting values": organs})
 
 	return organs
 }

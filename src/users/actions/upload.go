@@ -102,10 +102,19 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 		fileType := fh[0].Header.Get("Content-Type")
 		fileSize := fh[0].Size
 
+		fileSizeKB := fileSize / 1000
+
 		log.Info(log.V{"Product Submission": "File Upload", "fileType": fileType})
-		log.Info(log.V{"Product Submission": "File Upload", "fileSize (kB)": fileSize / 1000})
+		log.Info(log.V{"Product Submission": "File Upload", "fileSize (kB)": fileSizeKB})
 
 		if fileType == "image/png" || fileType == "image/jpeg" {
+
+			if fileSizeKB > 5000 {
+				// Image size is over the limit
+				log.Error(log.V{"Upload, Image over size": fileSizeKB})
+				return server.Redirect(w, r, "/?error=image_oversize#upload")
+			}
+
 			file, err := fh[0].Open()
 			defer file.Close()
 
@@ -156,14 +165,16 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 			organs := users.Parse(body)
 
 			if len(organs) > 0 {
-				log.Info(log.V{"Organs after parsing ": organs})
+				// Disabling log for privacy
+				// log.Info(log.V{"Organs after parsing ": organs})
 
 				dexaCookie, err := r.Cookie("reports")
 
 				if err != nil {
-					log.Error(log.V{"Upload, Error occurred while reading cookie": err})
+					log.Error(log.V{"Upload, Cookie not found error, Probably no report was uploaded yet": err})
 				} else {
-					log.Info(log.V{"Upload, dexaCookie ": dexaCookie})
+					// Disabling log for privacy
+					// log.Info(log.V{"Upload, dexaCookie ": dexaCookie})
 				}
 
 				if dexaCookie == nil {
@@ -184,14 +195,13 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 					cookieContent, err := json.Marshal(report)
 
-					t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
-
-					if err != nil {
-						log.Error(log.V{"Upload, Setting cookie expires": err})
-						return server.InternalError(err)
-					}
-
 					if err == nil {
+						t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+
+						if err != nil {
+							log.Error(log.V{"Upload, Setting cookie expires": err})
+							return server.InternalError(err)
+						}
 						dexaCookie := &http.Cookie{
 							Name:    "reports",
 							Value:   base64.StdEncoding.EncodeToString(cookieContent),
@@ -217,6 +227,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 						err = json.Unmarshal([]byte(decodedContent), &report)
 
 						if err == nil {
+
 							id := len(report.Dexas) + 1
 
 							tempDexa := users.Dexa{
@@ -235,14 +246,22 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 							cookieContent, err := json.Marshal(tempReport)
 
-							t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+							// Check if the cookie size limit has been reached, Accounting for the default size
+							if cookieContentSize := len(base64.StdEncoding.EncodeToString(cookieContent)); cookieContentSize > 4096 {
+								log.Info(log.V{"Upload, Cookie size limit reached": cookieContentSize})
 
-							if err != nil {
-								log.Error(log.V{"Upload, Setting cookie expires": err})
-								return server.InternalError(err)
+								// Cookie size limit reached
+								return server.Redirect(w, r, "/?error=max_reports_reached#upload")
 							}
 
 							if err == nil {
+								t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+
+								if err != nil {
+									log.Error(log.V{"Upload, Setting cookie expires": err})
+									return server.InternalError(err)
+								}
+
 								dexaCookie := &http.Cookie{
 									Name:    "reports",
 									Value:   base64.StdEncoding.EncodeToString(cookieContent),

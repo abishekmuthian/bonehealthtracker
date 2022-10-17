@@ -17,3 +17,4 @@ bonehealthtracker
 .vscode/*
 .patch
 svelte/node_modules
+__debug_bin

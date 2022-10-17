@@ -96,7 +96,8 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 		return server.Redirect(w, r, "/?error=security_challenge_not_completed_research#research")
 	}
 
-	if len(params.Get("first-report-age")) > 0 &&
+	if len(params.Get("sex")) > 0 &&
+		len(params.Get("first-report-age")) > 0 &&
 		len(params.Get("latest-report-age")) > 0 &&
 		len(params.Get("treatment")) > 0 &&
 		len(params.Get("race-ethnicity")) > 0 {
@@ -112,7 +113,8 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 
 			return server.InternalError(err, "Submission Failed", "Sorry your submission failed to record contact support")
 		} else {
-			log.Info(log.V{"Update, dexaCookie ": dexaCookie})
+			// Disabling for privacy
+			// log.Info(log.V{"Update, dexaCookie ": dexaCookie})
 		}
 
 		decodedContent, err := base64.StdEncoding.DecodeString(dexaCookie.Value)
@@ -125,6 +127,7 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 				dexas = report.Dexas
 
 				tempReport := users.Report{
+					Sex:             params.Get("sex"),
 					FirstReportAge:  int(params.GetInt("first-report-age")),
 					LatestReportAge: int(params.GetInt("latest-report-age")),
 					Treatment:       params.Get("treatment"),
@@ -134,14 +137,14 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 
 				cookieContent, err := json.Marshal(tempReport)
 
-				t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
-
-				if err != nil {
-					log.Error(log.V{"Upload, Setting cookie expires": err})
-					return server.InternalError(err)
-				}
-
 				if err == nil {
+
+					t, err := time.Parse(time.RFC1123, "Sun, 17 Jan 2038 19:14:07 GMT") // Cookie expires before 2038 bug
+
+					if err != nil {
+						log.Error(log.V{"Upload, Setting cookie expires": err})
+						return server.InternalError(err)
+					}
 					dexaCookie := &http.Cookie{
 						Name:    "reports",
 						Value:   base64.StdEncoding.EncodeToString(cookieContent),

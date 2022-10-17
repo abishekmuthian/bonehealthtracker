@@ -32,7 +32,8 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		log.Error(log.V{"Upload, Error occurred while reading cookie": err})
 	} else {
-		log.Info(log.V{"Upload, dexaCookie ": dexaCookie})
+		// Disabling log for privacy
+		// log.Info(log.V{"Upload, dexaCookie ": dexaCookie})
 	}
 
 	if dexaCookie != nil {

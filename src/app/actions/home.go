@@ -45,9 +45,10 @@ func HandleHome(w http.ResponseWriter, r *http.Request) error {
 	dexaCookie, err := r.Cookie("reports")
 
 	if err != nil {
-		log.Error(log.V{"Home, Error occurred while reading cookie": err})
+		log.Error(log.V{"Home, Cookie not found error, Probably no report was uploaded yet": err})
 	} else {
-		log.Info(log.V{"Home, dexaCookie ": dexaCookie})
+		// Disabling log for privacy
+		// log.Info(log.V{"Home, dexaCookie ": dexaCookie})
 	}
 
 	if dexaCookie != nil {
