@@ -34,7 +34,7 @@ type zScore struct {
 	endOffset   float64
 }
 
-// Parse parses the medical data from AWS Comprehend Medical and returns organs
+// Parse parses the medical data from AWS Comprehend Medical and returns organs(bone sites)
 func Parse(dexaData []byte) []Organ {
 	var result interface{}
 	err := json.Unmarshal(dexaData, &result)
@@ -324,6 +324,7 @@ func Parse(dexaData []byte) []Organ {
 	return setOrganValues(organs, directions, tScores, zScores, bmds)
 }
 
+// setOrganValues matches the T-Scores,Z-Scores,Directions,BMDs to the Organs(bone sites)
 func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zScores []zScore, bmds []BMD) []Organ {
 
 	var organBeginOffsets, organEndOffsets []float64
@@ -377,7 +378,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 	}
 
 	// Remove duplicate organs
-
 	tempOrgans = []Organ{}
 
 	for _, organ := range organs {
@@ -462,6 +462,7 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 		}
 	}
 
+	// Find the BMD for the Organs
 	if len(bmds) != len(organs) {
 		organBeginOffsets = []float64{}
 		organEndOffsets = []float64{}
@@ -492,7 +493,6 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 	}
 
 	// Add Id and remove offsets for privacy
-
 	tempOrgans = []Organ{}
 
 	for i, organ := range organs {
@@ -511,6 +511,7 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 	return organs
 }
 
+// findClosestElementIndex finds the closest organ(bone sites) offset to the entity offset and returns the index
 func findClosestElementIndex(arr []float64, k int, x float64) int {
 	return sort.Search(len(arr)-k, func(i int) bool { return x-arr[i] <= arr[i+k]-x })
 }

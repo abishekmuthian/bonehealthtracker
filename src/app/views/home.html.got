@@ -505,6 +505,7 @@ inkscape:version="0.48.0 r9654"
         <header>
             <h2>T-score Chart</h2>
             <p>The T-score on your bone density report shows how much your bone mass differs from the bone mass of an average healthy 30 year old adult.</p>
+            <small>The scores are measured in number of standard deviations from the mean.</small>
         </header>
         <div>
             <canvas id="tScoreChart" width="400" height="400"></canvas>
@@ -516,6 +517,7 @@ inkscape:version="0.48.0 r9654"
         <header>
             <h2>Z-score Chart</h2>
             <p>Z-score is a comparison of your individual bone mineral density (BMD) to what is expected for a person of the same age and sex.</p>
+            <small>The scores are measured in number of standard deviations from the mean.</small>
             <small>Z-scores values would be all zeros if the report didn't include them.</small>
         </header>
         <div>

@@ -19,6 +19,8 @@ import (
 	"github.com/abishekmuthian/bonehealthtracker/src/users"
 )
 
+// HandleUpload handles the upload of the BMD report
+// Responds to the post request /upload
 func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 	// Check the authenticity token
@@ -34,7 +36,6 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Using turnstile to verify users
-
 	if len(params.Get("cf-turnstile-response")) > 0 {
 		if string(params.Get("cf-turnstile-response")) != "" {
 
@@ -128,8 +129,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 
 			}
 
-			// Send it to the AWS Comprehend Medical Middleware
-
+			// Send it to the Textract & Comprehend Medical Middleware
 			type classifierRequest struct {
 				Data []byte `json:"data"`
 			}
@@ -178,7 +178,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 				}
 
 				if dexaCookie == nil {
-
+					// There is a reports cookie already in the browser
 					var dexas []users.Dexa
 
 					dexa := users.Dexa{
@@ -217,6 +217,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) error {
 					}
 
 				} else {
+					// There was no cookie set, This is the first time
 					var dexas []users.Dexa
 
 					report := users.Report{}

@@ -18,6 +18,8 @@ import (
 	"github.com/abishekmuthian/bonehealthtracker/src/users"
 )
 
+// HandleUpdate handles the update of the research form
+// Responds to the post /update
 func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 
 	// Check the authenticity token
@@ -33,7 +35,6 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Using turnstile to verify users
-
 	if len(params.Get("cf-turnstile-response")) > 0 {
 		if string(params.Get("cf-turnstile-response")) != "" {
 
@@ -160,7 +161,6 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) error {
 				}
 
 				// Store in the database
-
 				_, err = query.Exec("insert into reports (report) VALUES($1)", cookieContent)
 
 				if err != nil {
