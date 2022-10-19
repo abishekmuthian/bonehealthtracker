@@ -18,3 +18,4 @@ bonehealthtracker
 .patch
 svelte/node_modules
 __debug_bin
+__pycache__
