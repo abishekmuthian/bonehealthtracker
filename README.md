@@ -15,15 +15,15 @@ Bone Health Tracker helps us visualize and monitor our bone health through **Bon
 Clicking the above image would open the demo video in YouTube.
 
 ### Features
-1. Automatic report table generation.
+1. Automatic report table generation. No need to enter confusing numbers which are prone to mistakes manually.
    
 ![Automatic report table generation](backup/demo/table-2.png)
 
-2. Skeleton showing the areas of interest from the report with different colors indicating Osteoporosis, Osteopenia and Normal bones.
+2. Skeleton showing the areas of interest dynamically from the report with different colors indicating Osteoporosis, Osteopenia and Normal bones. Helps even those without prior medical training to get better clarity on their BMD scan test reports. Legend for the colors would be displayed below the skeleton image.
 
 ![Skeleton](backup/demo/skeleton.png)
 
-3. T-score Chart and Z-score Chart comparing historical reports to track the progress of the treatment.
+3. T-score Chart and Z-score Chart comparing historical reports to track the progress of the treatment. Helps save lot of time for the healthcare professionals and the patients alike as this activity is usually done manually.
 
 ![T-score Chart](backup/demo/T-score-chart.png)
 
@@ -110,7 +110,7 @@ After ensuring Middleware Server is running,
 1. Occasionally, Amazon Comprehend Medical returns incorrect offset for the BMD scores and thereby mismatching the BMD score for those bone sites. Deleting the report and Uploading it again fixes the issue.
 2. Bone Health Tracker can currently display utmost 3-4 reports due to limitations with cookie size.
 3. If a later report contains a new bone site, Then it could be shown as belonging to a wrong year. Usually, Consecutive reports have same bone sites for a patient.
-4. Bone Health Tracker uses [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) for the security of the forms as an alternative for captcha. This is necessary because Bone Health Tracker would be used by the elderly and disabled where a captcha can cause friction. Turnstile is currently in Beta and so there are occasions when the widget doesn't get displayed; A browser refresh usually fixes it and if doesn't then we need to give a gap of 10-15 mins before attempting again.
+4. Bone Health Tracker uses [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) for the security of the forms as an alternative for captcha. This is necessary because Bone Health Tracker could be used by elderly and the disabled where a captcha can cause friction. Turnstile is currently in Beta and so there are occasions when the widget doesn't get displayed; A browser refresh usually fixes it and if doesn't then we need to give a gap of 10-15 mins before attempting again.
 
 ### Copyright
 © 2022 Abishek Muthian https://bonehealthtracker.com.
