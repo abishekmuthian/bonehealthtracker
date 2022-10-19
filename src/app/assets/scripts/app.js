@@ -12,6 +12,7 @@ DOM.Ready(function () {
   ActivateChart();
 });
 
+// Toggles the theme
 function ToggleDarkMode() {
   let bodyTag = document.getElementsByTagName("body")[0];
   let toggleTag = document.getElementById("colorToggle");
@@ -27,6 +28,7 @@ function ToggleDarkMode() {
   }
 }
 
+// Gets the theme from the cookie and sets the theme
 function HandleDarkMode() {
   let toggleTag = document.getElementById("colorToggle");
   let bodyTag = document.getElementsByTagName("body")[0];
@@ -79,6 +81,7 @@ function ActivateForms() {
   });
 }
 
+// Gets the token from the DOM
 function authenticityToken() {
   // Collect the authenticity token from meta tags in header
   var meta = DOM.First("meta[name='authenticity_token']");
@@ -437,12 +440,11 @@ function ActivateChart() {
           },
         },
       });
-
-
     }
   }
 }
 
+// Gets the cookie from the browser
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -459,6 +461,7 @@ function getCookie(cname) {
   return "";
 }
 
+// Sets the cookie in the browser
 function setCookie(cname, cvalue, exdays) {
   let expires;
   if (exdays) {
@@ -472,6 +475,7 @@ function setCookie(cname, cvalue, exdays) {
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+// Makes a color transparent by decreasing the alpha channel
 function transparentize(value, opacity) {
   var colorString = value,
     colorsOnly = colorString
