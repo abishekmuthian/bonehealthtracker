@@ -25,8 +25,8 @@ Clicking the above image would open the demo video in YouTube.
 
 3. T-score Chart and Z-score Chart comparing historical reports to track the progress of the treatment. Helps save lot of time for the healthcare professionals and the patients alike as this activity is usually done manually.
 
-![T-score Chart](backup/demo/T-score-chart.png)
-
+![T-score Chart](backup/demo/T-score-chart-full.png)
+![Z-score Chart](backup/demo/Z-score-chart-full.png)
 
 ### Architecture
 ![Bone Health Tracker demo video](backup/demo/BHT_Architecture.jpg)

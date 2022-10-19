@@ -594,14 +594,18 @@ inkscape:version="0.48.0 r9654"
   <br/>
     <figure>
         <img alt="screenshot of a skeleton visualization in Bone Health Tracker" src="/assets/images/app/skeleton_supershot.png">
-        <figcaption><i>Skeleton visualization shows the status of bones from your latest report according to WHO classification.</i></figcaption>
+        <figcaption><i>Skeleton visualization shows the status of bones from our latest report according to WHO classification.</i></figcaption>
     </figure>
     <br/>
     <br/>
     <figure>
-        <img alt="screenshot of a chart visualization in Bone Health Tracker" src="/assets/images/app/chart_supershot.png">
-        <figcaption><i>The Chart keeps track of the T-scores from your BMD reports and helps you monitor the progress of your treatment.</i></figcaption>
+        <img alt="screenshot of a T-score chart visualization in Bone Health Tracker" src="/assets/images/app/t-score_chart_supershot.png">
+        <figcaption><i>T-score chart showing how much our bone mass differs from the bone mass of an average healthy adult.</i></figcaption>
     </figure>
+    <figure>
+      <img alt="screenshot of a Z-score chart visualization in Bone Health Tracker" src="/assets/images/app/z-score_chart_dark_supershot.png">
+      <figcaption><i>Z-score chart showing our individual BMD to what is expected for a person of the same age and sex.</i></figcaption>
+  </figure>
 </section>
 <hr>
 
