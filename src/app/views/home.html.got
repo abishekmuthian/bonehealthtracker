@@ -29,7 +29,7 @@
         <p>Upload photo of the assessment section from the Dexa(BMD) scan report</p>
         <p><sup>PRO TIP</sup>Click <a href="#faq">here</a> to know how a BMD assessment section looks like.</p>
     </header>
-        <form method="post" enctype="multipart/form-data" action="/users/upload">
+        <form id="upload-form" method="post" enctype="multipart/form-data" action="/users/upload">
             <label>Select the photo of the assessment section</label>
             <input type="file" accept="image/*" required name="dexaScanImage"/>
             <div class="cf-turnstile" data-sitekey="{{ .turnstile_site_key }}"></div> 
@@ -534,7 +534,7 @@ inkscape:version="0.48.0 r9654"
         <p><a href="/">Refresh</a> the page to update security verification before entering the details.</p>
     </header>
 
-    <form action="/users/update" method="post" id="research-form">
+    <form id="research-form" action="/users/update" method="post" id="research-form">
       <header>
         <h2>Bone Health Research</h2>
       </header>
