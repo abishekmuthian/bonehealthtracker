@@ -115,7 +115,7 @@ After ensuring Middleware Server is running,
 ### Copyright
 © 2022 Abishek Muthian https://bonehealthtracker.com.
 
-Private repository submitted as an entrant for [AWS Health AI Hackathon](https://awshealthai.devpost.com/).
+Submitted as an entrant for [AWS Health AI Hackathon](https://awshealthai.devpost.com/).
 
 ### Open-Source Licenses
 Licenses for open-source libraries used in this project.
