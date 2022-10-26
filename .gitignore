@@ -19,3 +19,5 @@ bonehealthtracker
 svelte/node_modules
 __debug_bin
 __pycache__
+db/bht.db-shm
+db/bht.db-wal

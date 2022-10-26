@@ -91,8 +91,6 @@ func (db *SqliteAdapter) Exec(query string, args ...interface{}) (sql.Result, er
 
 // Insert a record with params and return the id - psql behaves differently
 func (db *SqliteAdapter) Insert(query string, args ...interface{}) (id int64, err error) {
-	db.Mutex.Lock()
-	defer db.Mutex.Unlock()
 	// Execute the sql using db
 	result, err := db.Exec(query, args...)
 	if err != nil {
