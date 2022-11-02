@@ -113,13 +113,23 @@ After ensuring Middleware Server is running,
 4. Bone Health Tracker uses [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) for the security of the forms as an alternative for captcha. This is necessary because Bone Health Tracker could be used by elderly and the disabled where a captcha can cause friction. Turnstile is currently in Beta and so there are rare occasions when the widget doesn't get displayed; A browser refresh usually fixes it and if doesn't then we need to give a gap of 10-15 mins before attempting again.
 5. Parser prints error when it encounters elements it couldn't parse, These are expected and doesn't affect the function of the application.
 
-### Copyright
-© 2022 Abishek Muthian https://bonehealthtracker.com.
+### License
+Copyright (C) 2022  Abishek Muthian (www.bonehealthtracker.com)
 
-Submitted as an entrant for [AWS Health AI Hackathon](https://awshealthai.devpost.com/).
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-### Open-Source Licenses
-Licenses for open-source libraries used in this project.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+### Licenses for open-source libraries used in this project.
 
 Fragmenta: https://github.com/fragmenta licensed under [The MIT License](https://github.com/andybrewer/mvp/blob/master/LICENSE).
 
