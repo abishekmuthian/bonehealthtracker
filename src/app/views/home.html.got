@@ -699,9 +699,9 @@ inkscape:version="0.48.0 r9654"
                     Why did you build this?
                     <p>
                       <video width="100%" height="auto" controls preload="metadata">
-                        <source src="/assets/videos/bht_demo.m4v" type="video/mp4">
-                        <track label="English" kind="subtitles" srclang="en-IN" src="/assets/videos/bht_demo.vtt" default>
-                        Watch this video on <a href="https://youtu.be/5F_4vry5EJ4">YouTube</a>.
+                        <source src="/assets/videos/bht_general.mp4" type="video/mp4">
+                        <track label="English" kind="subtitles" srclang="en-IN" src="/assets/videos/captions.vtt" default>
+                        Watch this video on <a href="https://www.youtube.com/watch?v=vjj9zpyXssk">YouTube</a>.
                       </video>
                     </p>
                 </li>
@@ -711,6 +711,13 @@ inkscape:version="0.48.0 r9654"
                 </li>
             </ul>
         </div>
+</section>
+
+<br>
+<section>
+<article>
+  <iframe src="https://github.com/sponsors/abishekmuthian/card" title="Sponsor abishekmuthian" height="225" width="600" style="border: 0;"></iframe>
+</article>
 </section>
 
 <br/>
