@@ -531,7 +531,6 @@ inkscape:version="0.48.0 r9654"
         <h2>Submit your reports for research</h2>
         <p>You can submit your report <mark>without any personal data</mark> for bone treatment research.</p>
         <p>Please add additional details for providing more insights about the report.</p>
-        <p><a href="/">Refresh</a> the page to update security verification before entering the details.</p>
     </header>
 
     <form id="research-form" action="/users/update" method="post" id="research-form">
