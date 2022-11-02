@@ -143,6 +143,15 @@ boto3: https://github.com/boto/boto3 licensed under [Apache License 2.0](https:/
 
 Amazon Textract Results Parser: https://github.com/mludvig/amazon-textract-parser, A module packaged from   [aws-samples/amazon-textract-code-samples](https://github.com/aws-samples/amazon-textract-code-samples) licensed under [The MIT License](https://github.com/aws-samples/amazon-textract-code-samples/blob/master/LICENSE).
 
+### Image Credits
+Human skeleton by [LadyofHats from Wikipedia](https://en.wikipedia.org/wiki/File:Human_skeleton_front_en.svg#file).
+
+Privacy Icon made by [Circlon Tech](https://www.flaticon.com/authors/circlon-tech) from [www.flaticon.com](https://www.flaticon.com/).
+
+Machine Learning Icon made by [Machine learning icons created by Circlon Tech - Flaticon](https://www.flaticon.com/free-icons/machine-learning).
+
+Joint Icon by [Bone icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/bone).
+
 
 
 
