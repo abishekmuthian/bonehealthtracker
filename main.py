@@ -10,6 +10,7 @@ import base64
 
 app = FastAPI()
 
+
 class UserRequestIn(BaseModel):
     """
     Class for holding the data from user request
@@ -23,7 +24,6 @@ def classification(user_request_in: UserRequestIn):
     Process the user request with image data.
     Return the JSON with Entities
     """
-
 
     client = boto3.client(service_name='textract', region_name='us-east-2')
 
@@ -48,5 +48,8 @@ def classification(user_request_in: UserRequestIn):
             response = comprehend_medical_client.detect_entities_v2(
                 Text=pageText[0+i:maxLength+i])
             comprehendResponse.append(response)
-            
-    return comprehendResponse[0]
+
+    if (len(comprehendResponse) > 0):
+        return comprehendResponse[0]
+    else:
+        return comprehendResponse[0] == ""
