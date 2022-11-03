@@ -11,7 +11,7 @@ Bone Health Tracker helps us to **visualize our bone health** easily and helps *
 Bone Health Tracker helps us visualize and monitor our bone health through **Bone Mineral Density** scan reports and also provides a way for submitting the data **without any personal information** for bone health research.
 
 ### Demo
-[![Bone Health Tracker demo video](backup/demo/bonehealthtracker_featured_image.png)](https://www.youtube.com/watch?v=5F_4vry5EJ4)
+[![Bone Health Tracker demo video](backup/demo/bonehealthtracker_featured_image.png)](https://www.youtube.com/watch?v=vjj9zpyXssk)
 Clicking the above image would open the demo video in YouTube.
 
 ### Features
