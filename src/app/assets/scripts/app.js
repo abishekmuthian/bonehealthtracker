@@ -248,6 +248,45 @@ function ActivateChart() {
       }
     }
 
+    // Returns change percentage from last year and change percentage from first year
+    const changePercentage = (tooltipItems) => {
+      let currentIndex = tooltipItems.dataIndex;
+      if (currentIndex === 0) return null;
+
+      let firstVal = tooltipItems.dataset.data[0];
+      let prevVal = tooltipItems.dataset.data[currentIndex - 1];
+      let currVal = tooltipItems.dataset.data[currentIndex];
+      let changeFromLastYear = 0;
+      let changeFromFirstYear = 0;
+
+      if (prevVal) {
+        changeFromLastYear = (
+          ((currVal - prevVal) / Math.abs(prevVal)) *
+          100
+        ).toFixed(2);
+
+        changeFromFirstYear = (
+          ((currVal - firstVal) / Math.abs(firstVal)) *
+          100
+        ).toFixed(2);
+      }
+      let changeFromLastYearString =
+        changeFromLastYear > 0
+          ? `Change from last year: +${changeFromLastYear}%`
+          : changeFromLastYear === 0
+          ? null
+          : `Change from last year: ${changeFromLastYear}%`;
+
+      let changeFromFirstYearString =
+        changeFromFirstYear >= 0
+          ? `Change from first year: +${changeFromFirstYear}%`
+          : `Change from first year: ${changeFromFirstYear}%`;
+
+      return currentIndex > 1
+        ? `${changeFromLastYearString} \n${changeFromFirstYearString}`
+        : `${changeFromLastYearString}`;
+    };
+
     if (apSpineTScore.length > 0) {
       tScoreDatasets.push({
         label: "AP Spine L1-L4",
@@ -416,6 +455,11 @@ function ActivateChart() {
               display: true,
               text: "Bone Health Tracker (T-score)",
             },
+            tooltip: {
+              callbacks: {
+                afterLabel: changePercentage,
+              },
+            },
           },
         },
       });
@@ -436,6 +480,11 @@ function ActivateChart() {
             title: {
               display: true,
               text: "Bone Health Tracker (Z-score)",
+            },
+            tooltip: {
+              callbacks: {
+                afterLabel: changePercentage,
+              },
             },
           },
         },
