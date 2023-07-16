@@ -6,7 +6,7 @@
         <p>Only the assessment section of Bone Mineral Density(Dexa Scan) report is needed.</p>
     </header>
     <aside>
-        <img alt="Twitter logo" src="/assets/images/app/joint.png" height="150">
+        <img alt="Bone Joint image" src="/assets/images/app/joint.png" height="150">
         <h3>Multiple Bone Sites</h3>
         <p>Track the health of your Spine, Hip, Femur, Femur Neck and Forearm using your historical and current BMD scan test reports.</p>
     </aside>
@@ -588,7 +588,7 @@ inkscape:version="0.48.0 r9654"
     <figure>
       <img alt="screenshot of a BMD report classified by Bone Health Tracker" src="/assets/images/app/table2_supershot.png">
       <figcaption><i>Report table with automatically classified Z-scores along with T-scores and BMDs in Bone Health Tracker.</i></figcaption>
-  </figure>
+    </figure>
   <br/>
   <br/>
     <figure>
@@ -604,7 +604,11 @@ inkscape:version="0.48.0 r9654"
     <figure>
       <img alt="screenshot of a Z-score chart visualization in Bone Health Tracker" src="/assets/images/app/z-score_chart_dark_supershot.png">
       <figcaption><i>Z-score chart showing our individual BMD to what is expected for a person of the same age and sex.</i></figcaption>
-  </figure>
+    </figure>
+    <figure>
+      <img alt="screenshot of a Z-score chart visualization in Bone Health Tracker" src="/assets/images/app/t-score-density-change-supershot.png">
+      <figcaption><i>T-score chart showing the percentage difference of current year from the last year and first year.</i></figcaption>
+    </figure>
 </section>
 <hr>
 
@@ -615,7 +619,7 @@ inkscape:version="0.48.0 r9654"
         <h3>Support</h3>
     </header>
     <div class="support">
-        <p>Please reach out to me on <a href="https://twitter.com/bonehealthtrack" target="_blank">Twitter</a> for
+        <p>Please reach out to me on <a href="https://github.com/abishekmuthian/bonehealthtracker/discussions" target="_blank">GitHub</a> for
             feedback or <a href="/legal#support" target="_blank">email for support.</a></p>
     </div>
 </section>
@@ -706,20 +710,29 @@ inkscape:version="0.48.0 r9654"
                 </li>
                 <li>
                     Where can I follow the development of Bone Health Tracker?
-                    <p>You can follow the development of Bone Health Tracker on <a href="https://twitter.com/bonehealthtrack" target="_blank">Twitter</a> </p>
+                    <p>You can follow the development of Bone Health Tracker on <a href="https://github.com/abishekmuthian/bonehealthtracker" target="_blank">GitHub</a> </p>
                 </li>
             </ul>
         </div>
 </section>
 
 <br>
-<section>
+<!-- <section>
   <header>
     <h3>Contribute towards the development of Bone Health Tracker</h3>
   </header>
 <article>
   <iframe src="https://github.com/sponsors/abishekmuthian/card" title="Sponsor abishekmuthian" height="225" width="600" style="border: 0;"></iframe>
 </article>
+</section> -->
+
+<section>
+<header>
+  <h3>Winner of AWS Health AI Hackathon</h3>
+  <figure>
+    <a href="https://devpost.com/software/bone-health-tracker"><img alt="Badge showing winner AWS Health AI Hackathon Second Place" src="/assets/images/app/aws-health-ai-hackathon-winner.png"></a>
+  </figure>
+</header>
 </section>
 
 <br/>

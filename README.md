@@ -28,6 +28,10 @@ Clicking the above image would open the demo video in YouTube.
 ![T-score Chart](backup/demo/T-score-chart-full.png)
 ![Z-score Chart](backup/demo/Z-score-chart-full.png)
 
+4. Change in bone density from previous year and since the start of the treatment.
+
+![Percentage change in density](backup/demo/density-change.png)
+
 ### Architecture
 ![Bone Health Tracker demo video](backup/demo/BHT_Architecture.jpg)
 
