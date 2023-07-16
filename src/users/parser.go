@@ -144,6 +144,16 @@ func Parse(dexaData []byte) []Organ {
 								EndOffset:   u.(map[string]interface{})["EndOffset"].(float64),
 							}
 
+							// Change femoral to femur
+							if strings.Contains(o.Site, "femoral") {
+								o.Site = strings.Replace(o.Site, "femoral", "femur", -1)
+							}
+
+							// Change hip to femur
+							if strings.Contains(o.Site, "hip") {
+								o.Site = strings.Replace(o.Site, "hip", "femur", -1)
+							}
+
 							organs = append(organs, o)
 
 						}
@@ -371,8 +381,34 @@ func setOrganValues(organs []Organ, directions []Direction, tScores []tScore, zS
 				}
 			}
 		} else if organ.Direction == "" && !strings.Contains(strings.ToLower(organs[i].Site), "forearm") &&
-			!strings.Contains(strings.ToLower(organs[i].Site), "l1 through l4") {
-			organs[i].Direction = "Remove"
+			!strings.Contains(strings.ToLower(organs[i].Site), "l1 through l4") &&
+			!strings.Contains(strings.ToLower(organs[i].Site), "l1-l4") {
+			if strings.Contains(strings.ToLower(organs[i].Site), "left") ||
+				strings.Contains(strings.ToLower(organs[i].Site), "right") ||
+				strings.Contains(strings.ToLower(organs[i].Site), "total") {
+
+				if strings.Contains(strings.ToLower(organs[i].Site), "left") {
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " left", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), "left ", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " left ", "", -1)
+					organs[i].Direction = "Left"
+				}
+
+				if strings.Contains(strings.ToLower(organs[i].Site), "right") {
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " right", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), "right ", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " right ", "", -1)
+					organs[i].Direction = "Right"
+				}
+
+				if strings.Contains(strings.ToLower(organs[i].Site), "total") {
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " total", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), "total ", "", -1)
+					organs[i].Site = strings.Replace(strings.ToLower(organs[i].Site), " total ", "", -1)
+				}
+			} else {
+				organs[i].Direction = "Remove"
+			}
 		}
 
 	}

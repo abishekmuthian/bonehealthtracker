@@ -21,3 +21,4 @@ __debug_bin
 __pycache__
 db/bht.db-shm
 db/bht.db-wal
+.venv/*
